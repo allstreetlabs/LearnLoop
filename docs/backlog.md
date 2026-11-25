@@ -1,6 +1,31 @@
 # MVP backlog and release boundaries
 
-November 25, 2026 · local 0.2 build complete; hosted pilot not approved/deployed
+## Completed 0.3 research and usability revision
+
+| ID | Acceptance criterion | Evidence |
+| --- | --- | --- |
+| LL-R01 | Record evidence and official app patterns, distinguish product claims from research, keep retrieval/application central. | Research report with sources and limits; ADR 005. |
+| LL-R02 | Author a single gap with bounded aliases/hint; deterministic normalization and source-linked feedback; no semantic grading or server-stored response. | Pure/domain/API tests and browser alias/authoring walkthrough. |
+| LL-R03 | Author 3–8 distinct process steps with an explicit question; move by buttons/keyboard, compare to saved order, show overlap caveat. | Validation/render tests; phone-sized browser ordering via keyboard. |
+| LL-R04 | Extra-practice events cannot alter FSRS, stage, item version, daily introductions or delayed-recall metrics. Changed content conflicts; changed schedule alone is harmless. | Tests with both unscheduled and already-scheduled items, stale-content and HTTP checks. |
+| LL-R05 | Explicitly install three source-linked examples in a separate set; dedupe and retain original 24. | Unit/API tests; browser install and original-set count. |
+| LL-R06 | Save bounded personal pace, pause new ideas at zero, choose guided/recall-first for future introductions; concurrent preferences cannot silently overwrite. | Unit/API tests; browser pause/save and recall-first progression. |
+| LL-R07 | Today explains pending/offline/paused states and next time-based returns, shows remaining allowance and work in other sets. | Browser paused/caught-up/return states; source review of global allowance. |
+| LL-R08 | View backup JSON and paste it for validated preview/confirmed isolated restore; previous formats remain accepted. | API tests plus complete browser paste → preview → RESTORE → success. Native file saving/chooser remains open. |
+| LL-R09 | Corrections preserve unchanged source scope, secondary references and section context; append revision and restart as before. | Source-preservation test; browser format correction (final section-preservation safeguard unit-tested). |
+
+Twenty-eight tests pass across the complete suite. This is software verification, not proof of learning improvement. Original acceptance rows below preserve the baseline; fixed routine/file-only limits are superseded by this section.
+
+## Next local refinements after use
+
+1. Finish actual Android/Chrome, native save/file chooser, light theme, zoom/screen-reader and same-origin offline-tab smoke checks.
+2. Time note capture → first usable prompt; reduce authoring friction if it impedes daily use. Acceptance target: one sourced idea saved in under two minutes without coaching.
+3. Design undo-last-eligible-grade with explicit event/schedule reversal rules before implementing; do not edit history silently.
+4. Consider visual identification for equipment and worked-example → independent calculation practice only when real material needs them.
+5. Run the delayed-recall comparison before adding more activity mechanics or growing the content set.
+
+
+November 25, 2026 · local 0.3 build complete; hosted pilot not approved/deployed
 
 ## Implemented local slice
 
@@ -13,9 +38,9 @@ November 25, 2026 · local 0.2 build complete; hosted pilot not approved/deploye
 | LL-P05 | One SQLite library shared across independent sessions. Idempotent action delivery, same-item conflict preservation/resolution, server-accepted ordering, revision checks. | Two-client HTTP tests and separate-origin browser history check. |
 | LL-P06 | Cached shell/library reloads offline; due recall queues durably, item is excluded pending acknowledgment, reconnection accepts once. Introductions/edits remain online. | Browser server-stop/reload/restart walkthrough plus server dedupe tests. |
 | LL-P07 | Capture note/passages and optional safe link; convert to prompt/answer/1–3 ideas; source/context visible. New manual items skip choice generation. | Browser capture and conversion to a 25th QA item; input/domain validation. |
-| LL-P08 | Every correction creates an immutable revision and resets learning. Old events keep old content/source references; stale attempts cannot grade the new revision. | Domain revision/conflict tests; browser correction form not fully exercised. |
-| LL-P09 | Full JSON backup/checksum, atomic validated restore with pre-restore recovery file/new epoch. Content JSON adds review items only and skips identical content. | Server/domain tests. Browser download and file chooser/restore still need manual smoke test. |
-| LL-P10 | Responsive phone/PC UI, system fonts, focus styles, native controls, reduced motion, no runtime CDN. | Browser phone-sized and desktop walkthrough. Actual Android and minimum-width/zoom/a11y audit remain open. |
+| LL-P08 | Every correction creates an immutable revision and resets learning. Old events keep old content/source references; stale attempts cannot grade the new revision. | Domain revision/conflict tests; 0.3 browser format correction observed, final provenance safeguard unit-tested. |
+| LL-P09 | Full JSON backup/checksum, atomic validated restore with pre-restore recovery file/new epoch. Content JSON adds review items only and skips identical content. | Server/domain tests and pasted-JSON browser restore. Native download and file chooser still need manual smoke test. |
+| LL-P10 | Responsive phone/PC UI, system fonts, focus styles, native controls, reduced motion, no runtime CDN. | Browser phone-sized and desktop walkthrough. 0.3 narrow 305-CSS-pixel Practice view has no overflow; actual Android/zoom/a11y audit remains open. |
 
 ## Before first ASL-subdomain pilot
 

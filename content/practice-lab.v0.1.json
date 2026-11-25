@@ -1,0 +1,128 @@
+{
+  "schema_version": "learnloop.content-review/0.1",
+  "pack_id": "learning-mode-examples-v0.1",
+  "title": "Learning mode examples",
+  "created_on": "2026-11-25",
+  "status": "personal_prototype_examples_for_review",
+  "purpose": "Optional examples for fill-the-gap and supported process ordering. Derived from the starter set, so not an independent assessment set.",
+  "sources": [
+    {
+      "id": "S06",
+      "title": "IBM What is a data center",
+      "url": "https://www.ibm.com/think/topics/data-centers",
+      "version": "Web page accessed November 17, 2026",
+      "checked_on": "2026-11-17",
+      "scope": "Introductory component roles; detailed electrical topology is project-specific."
+    },
+    {
+      "id": "S10",
+      "title": "WBDG commissioning documents process contents and acceptance",
+      "url": "https://legacy.wbdg.org/building-commissioning/commissioning-documents",
+      "version": "Legacy public page accessed November 17, 2026",
+      "checked_on": "2026-11-17",
+      "scope": "General-building documentation guidance; responsibilities and deliverables vary by scope."
+    },
+    {
+      "id": "S11",
+      "title": "AIA-MBA Joint Committee drawings and specifications guidance",
+      "url": "https://aiambajointcommittee.org/drawings-and-specifications/",
+      "version": "Sections B-1 and B-4; revisions listed on page",
+      "checked_on": "2026-11-17",
+      "scope": "Practitioner recommendations; actual document and approval responsibilities follow the project arrangements."
+    }
+  ],
+  "items": [
+    {
+      "id": "LAB-OPR",
+      "section": "Roles and handoffs",
+      "mode": "explain",
+      "status": "draft",
+      "prompt": "How do the Owner's Project Requirements and Basis of Design differ?",
+      "answer": "The OPR describes the outcomes and criteria the owner needs. The BOD explains the design team's technical approach for meeting them.",
+      "explanation": "They connect the reason for the facility to the proposed solution.",
+      "required_points": [
+        "OPR: intended outcomes",
+        "BOD: technical response"
+      ],
+      "basis": "source_summary",
+      "source_refs": [
+        {
+          "source_id": "S10",
+          "locator": "Documentation Contents, Owner's Project Requirements and Basis of Design"
+        }
+      ],
+      "variation": "Learn the distinction; exact document names and scope may vary.",
+      "practice": {
+        "kind": "cloze",
+        "question": "Name the document in this short statement.",
+        "template": "The [[Owner’s Project Requirements]] describe the outcomes and criteria the owner needs.",
+        "aliases": [
+          "OPR",
+          "Owner's Project Requirements"
+        ],
+        "hint": "Its common abbreviation has three letters."
+      }
+    },
+    {
+      "id": "LAB-UPS",
+      "section": "Physical systems and interfaces",
+      "mode": "recall",
+      "status": "draft",
+      "prompt": "What different roles do an uninterruptible power supply and a backup generator commonly play?",
+      "answer": "The UPS supports continuity through short interruptions and power disturbances; a generator can support a longer loss of the normal supply when the designed backup arrangement takes over.",
+      "explanation": "They address related but different parts of power continuity.",
+      "required_points": [
+        "Short interruption support",
+        "Longer backup supply"
+      ],
+      "basis": "source_summary",
+      "source_refs": [
+        {
+          "source_id": "S06",
+          "locator": "Power supply and cable management"
+        }
+      ],
+      "variation": "UPS technologies and transfer arrangements differ; this is not an electrical switching sequence.",
+      "practice": {
+        "kind": "cloze",
+        "question": "Recall the equipment name, rather than selecting it.",
+        "template": "A [[UPS]] commonly supports continuity through short interruptions and power disturbances.",
+        "aliases": [
+          "uninterruptible power supply"
+        ],
+        "hint": ""
+      }
+    },
+    {
+      "id": "LAB-SUBMITTAL",
+      "section": "Design procurement and construction",
+      "mode": "explain",
+      "status": "draft",
+      "prompt": "Why does the delivery schedule need time for submittal review before fabrication and delivery?",
+      "answer": "The proposed equipment and coordinated details need review before downstream commitments. Planning that sequence reduces late discoveries and schedule disruption.",
+      "explanation": "An arrival date alone hides the decisions needed to make delivery usable.",
+      "required_points": [
+        "Review precedes downstream commitments",
+        "Include review/fabrication/delivery dependencies"
+      ],
+      "basis": "applied_reasoning",
+      "source_refs": [
+        {
+          "source_id": "S11",
+          "locator": "Section B-4, Submission, submittal log and interrelated items"
+        }
+      ],
+      "variation": "Avoid inventing standard review durations.",
+      "practice": {
+        "kind": "sequence",
+        "question": "Order this simplified submittal-to-delivery chain.",
+        "steps": [
+          "Prepare and coordinate the required submittal",
+          "Complete the required review and resolve issues",
+          "Proceed with authorized fabrication and delivery"
+        ],
+        "hint": "Think about what needs to be reviewed before a downstream commitment."
+      }
+    }
+  ]
+}

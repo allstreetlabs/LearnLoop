@@ -1,6 +1,27 @@
 # Verification and limits
 
-## Current milestone — 0.2, November 25, 2026
+## Current milestone — 0.3, November 25, 2026
+
+Twenty-eight automated tests pass under Node 24.22.3. This retains all 18 earlier tests and adds format/alias/order validation, escaped rendering/hidden answers, optional/deduplicated example installation with original-24 preservation, practice-history/scheduler separation with null and existing cards, stale schedule versus changed content behavior, bounded/paused/concurrent preferences and future-only recall-first, version-3/legacy backup compatibility, source/context preservation on edit and a full HTTP refinement test. HTTP checks cover expected-owner backup guards, idempotency, destination-bound preview and owner-isolated restore. All JavaScript syntax checks pass. No new dependency or SQL migration.
+
+Chrome/Windows browser walkthrough used only D:/Codex/LearnLoop/tests/browser-v03, never the normal database. Observed:
+
+- Added the optional three-example set; completed a gap using an alias and a process chain using keyboard-activated move buttons. Feedback explicitly says extra practice does not change the recall schedule.
+- Paused introductions at zero, saved 3-minute/4-attempt recall-first preferences, saw the paused Today explanation; resumed at three new/day.
+- Viewed full backup JSON, pasted it, got validated restore counts, typed RESTORE and observed successful restore with cleared preview/text and the same local profile.
+- Corrected a process format as immutable revision 2; authored a new API gap and opened it. The later section-context preservation safeguard was unit-tested, not repeated on that old QA revision.
+- Stopped server, checked an extra-practice answer, saw one pending; reloaded offline with it intact; restarted/reconnected and saw zero pending. Expected outage has calm pending messaging. Export is unavailable with pending work.
+- With recall-first enabled, reviewed DCF-01, entered an explanation, checked required ideas and saved Good without choices. Today showed its next 10-minute return and zero delayed successes.
+- Measured no horizontal overflow on Data/restore at 375 CSS pixels and Today at 390. A requested 320px viewport produced 305 CSS pixels after the scrollbar; Practice page width equaled viewport width (305), no overflow. This is desktop responsive testing, not actual Android or a complete minimum-width audit. Viewport override reset.
+
+Screenshots are delivered outside the source repo: learnloop-v03-gap-phone.jpg, learnloop-v03-process-phone.jpg, learnloop-v03-today-phone.jpg, learnloop-v03-recovery.jpg and learnloop-v03-desktop.jpg. QA preview server was stopped. Clipboard copy itself, native file save/chooser, actual Android/install/background/update behavior, light theme, zoom/screen-reader audit and same-origin offline-tab/profile races remain unverified. Do not reuse stalled browser download/filechooser event waits. Pasted-JSON restore is now an observed alternative, not evidence of native-file success.
+
+The original 24-item source file is unchanged. A read-only comparison against the pre-refinement D: checkpoint found all 12 content/progress/accepted-action tables identical: 24 items, one set, 13 sources, zero events, SQLite integrity OK and no foreign-key failures. Optional examples were not installed into the normal library. The research report is a targeted official-documentation/abstract pass, not paid-app hands-on benchmarking or proof of LearnLoop efficacy. Keep overlapping examples out of a clean control/assessment set.
+
+The earlier evidence below is historical and retained for provenance.
+
+
+## Historical milestone — 0.2, November 25, 2026
 
 Eighteen automated tests pass after the sets/profile relational migration work. In addition to the original checks below, tests cover lossless legacy content/history/state migration, retained local sessions/dedupe ledger, automatic pre-migration snapshot, failed-migration rollback without changing legacy data, owner/set foreign keys, independent profiles, scoped API/backup/restore, legacy backup conversion and a global per-profile daily cap across sets. Tests used isolated D:\Codex\LearnLoop\tests fixtures. Syntax checks cover the new storage module, server, domain, client, service worker and backup helper.
 

@@ -1,5 +1,18 @@
 # LearnLoop build handoff
 
+## Current handoff — 0.3 research and refinement
+
+Start with STATUS.md and the live branch SHA, not the historical 0.2 closeout reference below. New instruction authorized local refinement and a research pass on learning apps/methods. Research: docs/research/2026-11-25-learning-methods-and-app-review.md; decision: ADR 005. Source/data foundations stay the same; no hosting, new service, dependency or SQL migration.
+
+Built: optional authored fill-the-gap and process-ordering practice, three explicit-install source-linked examples in a separate set, bounded personal pace/recall-first preferences with concurrent-save protection, clearer Today returns/pending/paused/allowance states, shorter actionable practice landing, and JSON view/paste preview/restore. Extra-practice history never changes production schedules, versions or delayed-recall counts, and never stores typed answers. Corrections retain unchanged source scopes/secondary references/context while adding immutable revisions and resetting learning. New backups are schema 3; prior 1/2 accepted.
+
+Twenty-eight tests plus syntax checks pass. Browser checks observed examples, both formats, keyboard ordering, format correction/authoring, preferences, recall-first, upcoming return, offline pending/reconnect and full pasted-JSON restore. See verification for precise widths and limits. Native file saving/chooser/clipboard copy and actual Android remain open. QA data is D:/Codex/LearnLoop/tests/browser-v03; do not copy it into the normal library or Git. Owned preview stopped. Final source/remote SHA and private checkpoint receipt are delivered outside Git to avoid self-referential hashes; verify current state.
+
+Next: Sam tries Today and Practice on the local PC, reviews original choice content and the three optional derived examples independently from usability. Test the actual phone after approved HTTPS hosting; current loopback cannot be reached from Android. Finish native save/chooser and multi-tab/accessibility smoke checks, then select a small equal-time delayed-recall trial. Do not contaminate the control with overlapping mode examples. Consider quick-capture friction and safe grade undo before more modes.
+
+No HQ task/approval linkage was established: supplied ID was not found and later connected searches repeatedly requested authentication. Keep that as a reconciliation task; do not create a duplicate project. Shared-sync/SAMOS pointers below are checked historical revisions, not claims of current remote state.
+
+
 Updated November 25, 2026. Owner: Sam. Lane: planning/design/engineering. Profile: local build with authorized Git source/status backups. Hosting approval absent.
 
 ## Recover first
@@ -31,7 +44,7 @@ Sam further clarified that he will actively use and personalize LearnLoop, build
 
 Additional exploratory directions are recorded in `docs/product/future-opportunities.md`: Avala and Intel Hub / Talent Network training modules, Google/other personal sign-in, optional shareable profiles/follows, friend knowledge challenges/rankings/levels and eventual downloadable phone distribution. None is an implemented connection or expanded build authorization. Account identity, private progress and shared content need separate boundaries; social/competitive features should be optional and distinguish practice activity from delayed recall.
 
-## Current 0.2 milestone
+## Historical 0.2 milestone
 
 Multiple learning sets, create/select-set flows, set-specific manual authoring and explicit relational per-profile storage are implemented. Migration preserves all 24 IDs, content/history/schedules, local sessions and dedupe ledger; before-migration SQLite recovery and failed-migration rollback are tested. Local development profiles demonstrate separate progress and owner-scoped APIs, not real Google sign-in or shared-device security. Eighteen automated tests pass. Browser checks observed new-set authoring and switching into/out of independent local profiles. API backup/restore passes; the browser download adapter stalled again and actual file completion/restore remains unverified. See ADR 004 and verification details.
 
@@ -43,7 +56,7 @@ Closeout: 0.2 implementation commit 5f2fc3735d84cadad25db8827a9643cd855135da pus
 
 24-item responsive PWA; review/choice/interleaved-repeat/free-response flow; pinned FSRS; required-idea self-check; due queue and daily caps; persistent SQLite shared library; sources and revisions; note capture/manual items; offline due recall/outbox; explicit conflicts; content JSON import and full JSON backup/atomic restore. Twelve automated tests plus syntax checks pass. Browser walkthrough covered core learning, two storage origins, offline reload/recovery and note conversion. See verification for exact limits and final safeguards not browser-regressed. Browser backup download automation stalled; do not report that path tested.
 
-## Next concrete action
+## Prior 0.2 next-action record
 
 Run the current local build and use it to learn/create sets. Finish a manual file download → preview → restore smoke test and same-origin offline tabs, using a method that does not repeat the stalled browser download-event adapter. Sam reviews choice distractors and actual Android usability. Prepare a concrete ASL-subdomain pilot plan: exact host/domain/runtime, real sign-in/invitation flow, per-user authorization, shared-set correction policy, off-machine recovery, cost and rollback. Approval is the final step before provisioning/deployment; never expose local profile selection as internet identity.
 

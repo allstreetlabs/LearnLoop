@@ -18,7 +18,7 @@ export async function createApp({ dataDir = join(root, 'data'), now = () => new 
     for await (const chunk of req) { size += chunk.length; if (size > 12 * 1024 * 1024) throw new Problem('File exceeds the 12 MB prototype limit.', 413); chunks.push(chunk); }
     try { return JSON.parse(Buffer.concat(chunks).toString()); } catch { throw new Problem('Invalid JSON. No changes were made.'); }
   }
-  const assets = { '/': ['index.html', 'text/html; charset=utf-8'], '/app.js': ['app.js', 'text/javascript'], '/style.css': ['style.css', 'text/css'], '/sw.js': ['sw.js', 'text/javascript'], '/icon.svg': ['icon.svg', 'image/svg+xml'], '/manifest.webmanifest': ['manifest.webmanifest', 'application/manifest+json'] };
+  const assets = { '/': ['index.html', 'text/html; charset=utf-8'], '/app.js': ['app.js', 'text/javascript'], '/learning.js':['learning.js','text/javascript'], '/screens.js':['screens.js','text/javascript'], '/style.css': ['style.css', 'text/css'], '/sw.js': ['sw.js', 'text/javascript'], '/icon.svg': ['icon.svg', 'image/svg+xml'], '/manifest.webmanifest': ['manifest.webmanifest', 'application/manifest+json'] };
   const server = http.createServer(async (req, res) => {
     const json = (code, value, headers = {}) => { res.writeHead(code, { 'Content-Type': 'application/json', ...headers }); res.end(JSON.stringify(value)); };
     res.setHeader('Cache-Control', 'no-store');
@@ -53,7 +53,11 @@ export async function createApp({ dataDir = join(root, 'data'), now = () => new 
       if (!session) throw new Problem('Open your local library to reconnect. Pending attempts are kept on this device.', 401);
       const userId=session.user_id;
       if (req.method === 'GET' && path === '/api/state') return json(200, views(get(userId)));
-      if (req.method === 'GET' && path === '/api/backup') return json(200, makeBackup(get(userId)),new URL(req.url,`http://${host}`).searchParams.has('download')?{'Content-Disposition':`attachment; filename="learnloop-backup-${new Date().toISOString().slice(0,10)}.json"`}:{});
+      if (req.method === 'GET' && path === '/api/backup') {
+        const params=new URL(req.url,`http://${host}`).searchParams;
+        if(params.has('ownerId')&&params.get('ownerId')!==userId)throw new Problem('The local profile changed. Reopen the correct library before exporting.',401);
+        return json(200, makeBackup(get(userId)),params.has('download')?{'Content-Disposition':`attachment; filename="learnloop-backup-${new Date().toISOString().slice(0,10)}.json"`}:{});
+      }
       if (req.method === 'POST' && path === '/api/action') {
         const action = await body(req);
         if(!action || typeof action!=='object' || Array.isArray(action))throw new Problem('A JSON action object is required.');
@@ -65,7 +69,7 @@ export async function createApp({ dataDir = join(root, 'data'), now = () => new 
           const lib = get(userId); const result = applyAction(lib, action, now());
           put(lib); db.prepare('INSERT INTO accepted_actions VALUES (?,?,?,?)').run(userId,key, requestHash, JSON.stringify(result)); return result;
         });
-        return json(result.conflict ? 409 : 200, { ...result, ...views(get(userId)) });
+        return json(result.conflict||result.settingsConflict ? 409 : 200, { ...result, ...views(get(userId)) });
       }
       if (req.method === 'POST' && path === '/api/preview') {
         const input = await body(req); const lib = get(userId); let summary;

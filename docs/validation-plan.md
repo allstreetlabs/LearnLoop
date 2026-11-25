@@ -1,5 +1,14 @@
 # Does LearnLoop improve delayed recall?
 
+## 0.3 measurement guardrails
+
+Gap matching and ordering provided steps are supported extra practice. Their events explicitly use extra_practice_not_scheduled_recall and do not alter FSRS, repeat gates, daily introductions, or the delayed-success counter. Log their exposure/time separately when analyzing the full backup; completion is not a recall outcome.
+
+The three optional examples derive from DCF-09, DCF-14 and DCF-18. Do not place their underlying concepts in the control condition while practicing the examples; either omit the examples for this comparison or keep all overlapping concepts in the intervention condition and match distinct concepts appropriately. Prefer a fresh small subject set if prior exposure makes the original 24 unsuitable.
+
+Keep pace settings and guided/recall-first choice fixed during a comparison and record them. Test independent unfamiliar wording/scenarios without gaps, choices or provided process steps. Assess content clarity/source support and interface friction separately from memory. The 28 passing software tests and browser walkthrough do not demonstrate learning benefit.
+
+
 This prototype records practice, not proof of effectiveness. Choice accuracy, repetition count and session completion are process measures. Learning is the ability to explain and apply an idea after time has passed without the app's cues.
 
 ## Small personal crossover trial
