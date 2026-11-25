@@ -35,3 +35,7 @@ The following is proposed work, not permission to host or invite friends.
 No certification packs/business, billing, public marketplace or signup; no 120-item expansion goal; no autonomous scraping/content generation, Ziggy runtime dependency, model grader, audio recording/transcription, reminders/jobs, document upload parser/OCR, web extraction, native Android package, graph/hierarchy engine, full offline editing or CRDT. CSV, arbitrary content-schema translation and cosmetic-only correction preservation are useful later. The initial local owner model is not the friends release's access model.
 
 Subscription access and attachment to another ASL product remain possible later outcomes. Prioritize sustained personal learning and small-pilot feedback first; no billing or integration framework is included in the next slice.
+
+## Future opportunity register
+
+See `product/future-opportunities.md`: candidate Avala and Intel Hub / Talent Network training modules; Google or other personal sign-in; optional public/shared profiles, follows and selected achievements; friend challenges, rankings and levels; later subscription features and downloadable/native phone distribution. Personal sign-in is already a pilot dependency, with provider unselected. The social, competitive, commercial and integration features remain later candidates. Keep participation XP distinct from delayed recall, and personal progress private unless the learner explicitly shares it.
