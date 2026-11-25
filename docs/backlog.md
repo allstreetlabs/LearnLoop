@@ -44,6 +44,8 @@ November 25, 2026 · local 0.3 build complete; hosted pilot not approved/deploye
 
 ## Before first ASL-subdomain pilot
 
+DNS update, November 25: Sam added learn A → 162.35.191.47 with TTL 3600; both authoritative nameservers and 1.1.1.1 independently verified it. LL-N01's DNS-record step is complete. Provider configuration, hosted identity/security, server deployment and recovery remain pending; this DNS update is not deployment approval.
+
 The following is proposed work, not permission to host or invite friends.
 
 **LL-N00 — completed local scope in 0.2: multiple sets and personal ownership.** Explicit local profiles, private learning sets, relational sources/item revisions and per-profile progress/history are implemented. Create/select-set and set-specific manual authoring work. All existing 24 IDs, source scopes, corrections, accepted events, schedules, sessions and dedupe ledger are preserved by tested migration. Eighteen tests pass, including failure rollback, independent progress and restore isolation; browser checks observed set creation/authoring and profile switching. Only private ownership is implemented; shared-set grants remain LL-N03. Local profiles are not secure sign-in; LL-N02 and actual hosted identity are still required before friends access it. No hosted database service was provisioned.

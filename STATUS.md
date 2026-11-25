@@ -20,7 +20,7 @@ No SQL migration or new dependency. Library schema remains 2; new backup schema 
 | Source/status continuity | Normal branch commit/push/readback at closeout; receipt outside Git |
 | Private recovery | Pre-refinement D: checkpoint verified; final clean-source checkpoint at closeout |
 | Daily continuity | ACTIVE back-up-learnloop-continuity, 11 p.m. local; requires app/computer/permissions |
-| ASL subdomain / personal pilot | Sam selected learn.allstreetlabs.com + Google login + ASL HQ. Read-only HQ/DNS preflight passed; docs/operations/asl-hq-deployment-plan.md and draft configs prepared. Hosted auth/Node 24/recovery work and explicit DNS/deployment approval remain open |
+| ASL subdomain / personal pilot | Sam added DNS: learn A → 162.35.191.47, TTL 3600, verified against both authoritative servers and 1.1.1.1. Google login + ASL HQ selected; plan/templates prepared. Hosted auth/Node 24/recovery work and provider/server deployment approval remain open |
 | Avala / Intel Hub / Talent Network | Future candidates, no connection assumed |
 | Social / subscriptions / native app | Future candidates after personal use/small pilot evidence |
 | AgenticHQ | Unresolved: supplied Think Tank ID not found, later searches repeatedly requested auth; reconcile without duplicates |

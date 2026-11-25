@@ -1,5 +1,9 @@
 # LearnLoop build handoff
 
+## DNS completed by Sam — November 25
+
+Sam reported adding the GoDaddy record. Independent read-only checks against ns73.domaincontrol.com, ns74.domaincontrol.com and 1.1.1.1 all returned learn.allstreetlabs.com A = 162.35.191.47, TTL 3600. DNS is complete at this observation; earlier absent-record/held-DNS statements below are historical. This is not TLS, Google login or app-deployment acceptance. No agent DNS/server/provider changes made; prior deployment/provider approval boundaries remain. Next engineering gate is hosted identity/security implementation and tests, followed by the reviewed deployment/recovery approval package.
+
 ## Selected HQ release plan — November 25
 
 Sam selected learn.allstreetlabs.com, Google login and ASL HQ; DNS/provider/server deployment changes remain unapproved. See docs/operations/asl-hq-deployment-plan.md and review-only deploy/asl-hq/ templates. Public HQ A and current inventory agree on 162.35.191.47; learn has no A/AAAA. Strict IP-pinned, non-sudo read-only SSH confirmed asl-hq, Caddy 2.11.3 active, system Node 18.19.1, about 4 GiB available RAM/90 GiB disk and free loopback 8830. Dedicated Node 24 is proposed; never upgrade HQ's global runtime for this app. Current 0.3 lacks hosted identity/security and cannot be deployed as-is. Old SSH alias/procedures point to retired IP; no keys/aliases/config changed. HQ exact item still not_found, latest correlation 011ad9cc-196f-45f0-8bce-c105c6dfd4e8; no duplicate record. No DNS, OAuth, runtime, service, proxy, backup job or learner-data changes executed.

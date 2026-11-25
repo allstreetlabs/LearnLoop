@@ -2,6 +2,8 @@
 
 November 25, 2026 · deployment state: PLANNED, NOT APPROVED TO EXECUTE
 
+**DNS milestone:** Sam subsequently added the GoDaddy A record. Read-only verification against ns73.domaincontrol.com, ns74.domaincontrol.com and 1.1.1.1 returned learn.allstreetlabs.com → 162.35.191.47, TTL 3600 on November 25. DNS is complete; the earlier absent-record observations/held DNS-save steps below describe the pre-change plan. Remaining server, Google-provider, backup-job and deployment actions are still held. DNS acceptance alone does not verify HTTPS, sign-in or the application.
+
 ## Confirmed direction and authority
 
 Sam selected learn.allstreetlabs.com, Google login and the ASL HQ server. This authorizes planning and existing local build/read-only work, not DNS edits, server writes, OAuth/provider configuration, deployment, new backup jobs or invitations. Source/status branch backups remain authorized. This plan supersedes the host/provider/name choices in hosted-personal-pilot.md.
