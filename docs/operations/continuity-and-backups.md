@@ -10,6 +10,8 @@ Sam requested regular repository backups of active state, feature backlog, statu
 4. Review the diff and tracked paths. Commit only LearnLoop source/documentation. Exclude all learner records, private backups/exports, secrets, sessions and browser data. Keep code commits separate from private runtime recovery.
 5. Push the working branch to https://github.com/allstreetlabs/LearnLoop with a normal push. Verify the remote branch SHA equals the intended local commit. Report local/committed/pushed/verified separately. Do not merge, rewrite history, modify unrelated repos or trigger deployment.
 
+Agent-authored local commits have used the per-command identity `Codex local build <codex@local.invalid>` when no repository identity is configured. Continue that explicit local identity rather than inventing Sam's email or changing global Git configuration. It is commit attribution, not an authentication credential.
+
 One daily heartbeat repeats this maintenance for the current chat. It may update evidence-backed docs and back up already-reviewed authorized work; it must not start product implementation, infrastructure or other jobs. Do not create no-op commits on unchanged days. Execution requires the local app/computer and permissions to be available; no always-on service is implied. Scheduler identity/status is recorded after creation.
 
 Confirmed automation: `back-up-learnloop-continuity`, ACTIVE, daily at 11 p.m. local Central time. The app reported creation and its view card was read back. This is the only recurring job authorized here.
