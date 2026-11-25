@@ -1,5 +1,9 @@
 # LearnLoop build handoff
 
+## Proposed phone/PC release — November 25
+
+Sam asked what is needed for an ASL subdomain and suggested learn.allstreetlabs.com. See docs/operations/hosted-personal-pilot.md: same-origin persistent Node/SQLite, Google sign-in proposed for Sam first, hosted request/security boundary, preserved library, HTTPS/DNS, off-machine recovery and real Android/PC acceptance. Public DNS currently has GoDaddy nameservers and no learn record. Product branch was verified at ed1efac before this documentation update; shared origin/master fetched at ebfa903. No host has been inspected/selected, no infrastructure or provider changes authorized/executed. HQ item still not_found after one authentication retry; preserve unresolved lineage without duplicating records.
+
 ## Current handoff — 0.3 research and refinement
 
 Start with STATUS.md and the live branch SHA, not the historical 0.2 closeout reference below. New instruction authorized local refinement and a research pass on learning apps/methods. Research: docs/research/2026-11-25-learning-methods-and-app-review.md; decision: ADR 005. Source/data foundations stay the same; no hosting, new service, dependency or SQL migration.
