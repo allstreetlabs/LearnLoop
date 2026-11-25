@@ -1,8 +1,10 @@
 # LearnLoop — personal MVP brief
 
-Updated November 25, 2026. Owner: Sam. First local build authorized; hosting separately approved.
+Updated November 25, 2026. Owner: Sam. First local build authorized; hosting approval pending.
 
 **Purpose:** turn material Sam is learning into knowledge he can explain and use after a delay. Add a useful idea, understand it, practice bringing it back, see what is slipping, and return at a sensible interval. Calm, quick sessions on Android/Chrome are the priority, with a usable PC interface and one shared library/history.
+
+**Product direction:** Sam will actively use LearnLoop, build sets around his own learning interests and adjust the system through experience. Invite friends, including Facebook friends, to a small pilot and learn from their use. A useful personalized learning system is a worthwhile outcome on its own. Subscription access or a supplemental feature in another ASL product are later options, assessed after repeated use demonstrates value; neither dictates the first release. Keep content/progress portable and the learning core independent of any future host product.
 
 **First subject:** how a data-center project moves from requirements and feasibility through design, procurement, construction, commissioning, handover and operation. Learn normal practice, dependencies, roles and how physical systems interact. A real project can illustrate the flow; individual-project/supplier intelligence is not the learning objective. Twenty-four sourced starter items cover six connected areas. They are personal draft learning material, not an industry credential or work instruction.
 
@@ -17,3 +19,5 @@ Updated November 25, 2026. Owner: Sam. First local build authorized; hosting sep
 **Next direction:** an ASL subdomain for regular personal use and a few invited friends, improving the app while learning. A small private pilot needs real sign-in, private per-person histories, a deliberate shared-set policy, persistent hosting and off-machine recovery before launch. Exact ASL domain/subdomain and runtime are unconfirmed. No hosting, deployment, paid services, public signup, commercial content pipeline or autonomous jobs have been authorized here. Playspace readiness is not assumed.
 
 **Success:** Sam can capture an idea, finish a short session, explain the important connections a week later and recover his library. Measure delayed free recall on parallel unfamiliar scenarios against time-matched note review; app completion and choice accuracy alone are insufficient evidence. See `docs/validation-plan.md`.
+
+**Iteration:** prioritize friction observed during real learning: adding and switching sets, reviewing/correcting prompts, choosing a manageable pace, understanding misses and returning voluntarily. Friend feedback should distinguish confusing content from awkward interactions. Expand based on those observations; collect no new analytics or automate feedback collection without a separate decision.

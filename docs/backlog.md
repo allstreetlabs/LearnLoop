@@ -21,6 +21,8 @@ November 25, 2026 · local build complete; hosted pilot not approved/deployed
 
 The following is proposed work, not permission to host or invite friends.
 
+**Next local build proposal — LL-N00: multiple sets and personal ownership.** Introduce explicit users, sets/access, source/item revisions and per-user progress/history; migrate the existing library. Add simple create/select-set flows. Acceptance: existing 24 IDs, sources, corrections and accepted events survive migration; progress is independent per learner; new sets can be created without code or a commercial compiler; exports remain recoverable. Real sign-in and cross-user API tests in LL-N02 are still required before a hosted pilot. This implements the direction in Decision 003 without provisioning a hosted database now.
+
 1. **LL-N01 — approve a concrete host/access plan.** Confirm exact ASL domain and desired subdomain, existing runtime/durable storage, operating owner, cost, TLS, rollback and backup destination. Prefer existing suitable ASL infrastructure if verified. Do not assume Playspace. Approval is a final gate after a reviewable plan; no provisioning or deployment now.
 2. **LL-N02 — real authentication and per-person ownership.** Remove/disable local session creation in hosted mode. Invitation-only sign-in, no public registration. Every private API and backup is scoped to the authenticated owner; devices cannot choose owner IDs. Acceptance: user A cannot read/export/edit/grade/restore user B's private data through any endpoint, including guessed IDs and conflicts. Two devices for A share A's progress; two different learners do not.
 3. **LL-N03 — define shared-set behavior.** Separate reusable learning-set revisions from personal progress and notes. Sharing is explicit; friend's notes/history are private by default. Decide who can publish corrections and how learners accept them. Acceptance: editing a shared set cannot silently change another person's reviewed answer or completed history.
@@ -31,3 +33,5 @@ The following is proposed work, not permission to host or invite friends.
 ## Deliberately deferred
 
 No certification packs/business, billing, public marketplace or signup; no 120-item expansion goal; no autonomous scraping/content generation, Ziggy runtime dependency, model grader, audio recording/transcription, reminders/jobs, document upload parser/OCR, web extraction, native Android package, graph/hierarchy engine, full offline editing or CRDT. CSV, arbitrary content-schema translation and cosmetic-only correction preservation are useful later. The initial local owner model is not the friends release's access model.
+
+Subscription access and attachment to another ASL product remain possible later outcomes. Prioritize sustained personal learning and small-pilot feedback first; no billing or integration framework is included in the next slice.

@@ -27,6 +27,8 @@ Sam approved a local prototype using the 24 candidates on November 24, adding Re
 
 Latest direction: ASL subdomain, regular personal learning and a few friends. Prepare an invitation-only pilot with shareable sets and private per-person progress. This does not authorize deployment, infrastructure, money, invitations or jobs. Keep that approval separate.
 
+Sam further clarified that he will actively use and personalize LearnLoop, build sets on his own subjects, and bring friends/Facebook friends into the pilot as it evolves. A subscription or a feature attached to another product is an option after use demonstrates value; a useful personal system is already a successful outcome. Read Decision 003 and LL-N00 before the next build. No subscription, integration or public growth machinery should displace the personal learning workflow.
+
 ## Verified local milestone
 
 24-item responsive PWA; review/choice/interleaved-repeat/free-response flow; pinned FSRS; required-idea self-check; due queue and daily caps; persistent SQLite shared library; sources and revisions; note capture/manual items; offline due recall/outbox; explicit conflicts; content JSON import and full JSON backup/atomic restore. Twelve automated tests plus syntax checks pass. Browser walkthrough covered core learning, two storage origins, offline reload/recovery and note conversion. See verification for exact limits and final safeguards not browser-regressed. Browser backup download automation stalled; do not report that path tested.
