@@ -1,0 +1,39 @@
+# DRAFT ONLY. Do not install with the current local-only 0.3 release.
+# Requires a reviewed hosted-enabled release and explicit deployment approval.
+[Unit]
+Description=LearnLoop private personal learning pilot
+After=network-online.target
+Wants=network-online.target
+ConditionPathExists=/etc/learnloop/learnloop.env
+
+[Service]
+Type=simple
+User=learnloop
+Group=learnloop
+WorkingDirectory=/opt/learnloop/current
+EnvironmentFile=/etc/learnloop/learnloop.env
+ExecStartPre=/opt/learnloop/runtime/node24/bin/node /opt/learnloop/current/scripts/assert-hosted-ready.mjs
+ExecStart=/opt/learnloop/runtime/node24/bin/node /opt/learnloop/current/server.mjs
+Restart=on-failure
+RestartSec=5
+TimeoutStopSec=30
+StateDirectory=learnloop
+StateDirectoryMode=0700
+UMask=0077
+NoNewPrivileges=yes
+PrivateTmp=yes
+ProtectHome=yes
+ProtectSystem=strict
+ReadWritePaths=/var/lib/learnloop
+RestrictSUIDSGID=yes
+ProtectKernelTunables=yes
+ProtectKernelModules=yes
+ProtectControlGroups=yes
+MemoryMax=512M
+CPUQuota=50%
+TasksMax=64
+LimitNOFILE=1024
+
+[Install]
+WantedBy=multi-user.target
+

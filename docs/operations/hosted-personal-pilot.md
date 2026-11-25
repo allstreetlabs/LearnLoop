@@ -1,5 +1,7 @@
 # Hosted personal pilot proposal
 
+**Superseded selections:** Sam has now selected learn.allstreetlabs.com, Google login and ASL HQ. Read docs/operations/asl-hq-deployment-plan.md for the verified current IP, read-only host preflight, exact GoDaddy entry and held execution plan. The earlier unselected-host/name statements below are historical. No DNS or deployment approval is implied.
+
 November 25, 2026 · proposed, not deployed or approved for infrastructure changes
 
 ## Recommended first release

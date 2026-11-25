@@ -1,6 +1,10 @@
 # LearnLoop build handoff
 
-## Proposed phone/PC release — November 25
+## Selected HQ release plan — November 25
+
+Sam selected learn.allstreetlabs.com, Google login and ASL HQ; DNS/provider/server deployment changes remain unapproved. See docs/operations/asl-hq-deployment-plan.md and review-only deploy/asl-hq/ templates. Public HQ A and current inventory agree on 162.35.191.47; learn has no A/AAAA. Strict IP-pinned, non-sudo read-only SSH confirmed asl-hq, Caddy 2.11.3 active, system Node 18.19.1, about 4 GiB available RAM/90 GiB disk and free loopback 8830. Dedicated Node 24 is proposed; never upgrade HQ's global runtime for this app. Current 0.3 lacks hosted identity/security and cannot be deployed as-is. Old SSH alias/procedures point to retired IP; no keys/aliases/config changed. HQ exact item still not_found, latest correlation 011ad9cc-196f-45f0-8bce-c105c6dfd4e8; no duplicate record. No DNS, OAuth, runtime, service, proxy, backup job or learner-data changes executed.
+
+## Historical initial phone/PC proposal — November 25
 
 Sam asked what is needed for an ASL subdomain and suggested learn.allstreetlabs.com. See docs/operations/hosted-personal-pilot.md: same-origin persistent Node/SQLite, Google sign-in proposed for Sam first, hosted request/security boundary, preserved library, HTTPS/DNS, off-machine recovery and real Android/PC acceptance. Public DNS currently has GoDaddy nameservers and no learn record. Product branch was verified at ed1efac before this documentation update; shared origin/master fetched at ebfa903. No host has been inspected/selected, no infrastructure or provider changes authorized/executed. HQ item still not_found after one authentication retry; preserve unresolved lineage without duplicating records.
 

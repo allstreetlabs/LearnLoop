@@ -1,0 +1,7 @@
+# DRAFT: merge as a new top-level site only after approval.
+# Do not replace HQ's existing Caddyfile or nested agent-auth import.
+learn.allstreetlabs.com {
+    encode zstd gzip
+    reverse_proxy 127.0.0.1:8830
+}
+
