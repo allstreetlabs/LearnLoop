@@ -2,7 +2,7 @@
 
 A quiet personal learning app: review an idea, check understanding, revisit it after a gap, then recall it in your own words. The first set contains 24 source-linked items about how data center projects work.
 
-**Local prototype, 0.1.0.** Canonical repository: https://github.com/allstreetlabs/LearnLoop. Sam authorized implementation on November 24, 2026. Hosting, deployment, infrastructure and publishing remain separately approved steps. This checkout has not been pushed or deployed.
+**Local prototype, 0.2.0.** Canonical repository: https://github.com/allstreetlabs/LearnLoop, working branch `build/local-prototype`. Sam authorized local building/testing/refinement and regular source/status GitHub backups on November 25. Source/documents are backed up on that branch; hosting, deployment and infrastructure remain separately approved steps. Read STATUS.md for active state and exact verification limits.
 
 ## Run
 
@@ -17,6 +17,8 @@ Open **http://127.0.0.1:8830** and choose **Open local library**. Stop with Ctrl
 
 The SQLite database is created on first launch at `data/learnloop.sqlite` and survives restarts. Existing data is never reseeded. Keep this whole data directory private and out of Git. The QA database is separately stored in `data/browser-qa/` and is not used by the normal launch. The delivery archive excludes all runtime data, dependencies and credentials.
 
+Version 0.2 migrates the old one-document library into owner-scoped users, learning sets, sources, items/revisions, progress, events, conflicts and drafts. A consistent `before-schema-2-*.sqlite` snapshot is saved before migrating a legacy database. Migration preserves existing IDs, history and schedules. Never replace an existing database with a fresh seed to upgrade.
+
 ## Try it
 
 1. Start a short session. Read an answer and its source context, then mark it reviewed.
@@ -26,11 +28,13 @@ The SQLite database is created on first launch at `data/learnloop.sqlite` and su
 5. Add a note or passage, with an optional HTTP/HTTPS source link. Save it for later, or create a prompt, answer and 1–3 required ideas. Manually authored items go from Review into free recall; the 24 starter items have authored choice checks.
 6. Use **Data** to export a full backup, preview a content import, or restore a backup. Verify the downloaded file exists. A download opening is not proof of a safely stored backup.
 
+Use **Manage sets** from Today or Library to create a subject, then select it before adding material. Practice and Library respect the selected set; daily introduction limits remain shared across all sets in the profile. Data → **Local profiles** lets you test a separate learner library and switch back. Each new local profile starts with its own starter set. These are local development profiles, not Google accounts or access protection against another person using the same computer. The picker and local session endpoint must be replaced before hosting.
+
 There are three new introductions per library calendar day (`America/Chicago`), shared across sessions. Due recall comes first. A session ends at ten practice attempts or after five minutes when moving to the next item. Browsing source-backed answers in Library is unrestricted and does not advance a grade.
 
 ## Shared progress and offline use
 
-Two browser sessions using this same running server read one shared database. Independent browser storage at `localhost:8830` and `127.0.0.1:8830` was used to test this. The app refreshes on focus and every 15 seconds while visible. This is not cross-device hosting: an Android phone cannot reach this PC's loopback address.
+Two browser sessions using the same profile on this running server share that profile's library. Different profiles have separate sets, notes and progress. A cookie-bound owner scopes every private API; request-supplied owner IDs cannot select another library. Browser caches, outboxes, editor drafts and attempted answers are keyed by profile. Changing the local profile in another tab pauses the old tab instead of mixing its pending work. The app refreshes on focus and every 15 seconds while visible. This is not cross-device hosting: an Android phone cannot reach this PC's loopback address.
 
 After an online visit, the app shell and downloaded library are available offline. Previously downloaded **due recall** can be graded into a durable IndexedDB outbox. An attempt stays visibly pending until the server acknowledges it; an item with pending work cannot be graded again locally. New introductions and item edits wait for a connection; note capture can remain pending offline. Repeated delivery of one action creates one event. Stale simultaneous attempts are preserved as conflicts and do not silently replace the shared schedule.
 
@@ -53,5 +57,7 @@ node --check public/sw.js
 ```
 
 See [architecture](docs/architecture/overview.md), [decisions](docs/decisions/002-local-staged-prototype.md), [QA evidence and limits](docs/verification.md), [backlog](docs/backlog.md), [validation plan](docs/validation-plan.md) and [build handoff](docs/handoff.md).
+
+Source/status continuity is checked daily by the authorized heartbeat and at material build milestones. See [backup procedure](docs/operations/continuity-and-backups.md). Private recovery copies go to `D:\Codex\LearnLoop\backups`, not Git. The daily maintenance is not an unattended development service or a hosting deployment. API recovery is tested; browser download/file restore still needs a manual check because the automation adapter repeatedly stalled.
 
 The content is a personal prototype, not an expert-reviewed qualification or site work instruction. Source scopes and dates remain visible. The original review file is preserved unchanged in `content/data-center-flow.v0.1.json`; Sam's build instruction authorizes its use here. New choice checks in `content/choices.json` are draft additions needing usability and content review separately.

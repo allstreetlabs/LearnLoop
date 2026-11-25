@@ -1,5 +1,19 @@
 # Verification and limits
 
+## Current milestone — 0.2, November 25, 2026
+
+Eighteen automated tests pass after the sets/profile relational migration work. In addition to the original checks below, tests cover lossless legacy content/history/state migration, retained local sessions/dedupe ledger, automatic pre-migration snapshot, failed-migration rollback without changing legacy data, owner/set foreign keys, independent profiles, scoped API/backup/restore, legacy backup conversion and a global per-profile daily cap across sets. Tests used isolated D:\Codex\LearnLoop\tests fixtures. Syntax checks cover the new storage module, server, domain, client, service worker and backup helper.
+
+A D: checkpoint was created before migration with a Git source bundle and consistent SQLite backup; bundle verification and SQLite integrity/foreign-key checks passed. A separate restore/migration rehearsal at D:\Codex\LearnLoop\tests\restore-rehearsal-8FIvq5 compared every legacy content/history/state field and verified the source recovery file's SHA-256 remained unchanged. It contained 24 items/zero learning events. The fixture migration test separately exercises a real scheduled recall history, not only an empty-progress seed.
+
+Browser observations on the dedicated D: QA database: created Application architecture, added a manual API prompt into it, observed the original data-center set still had 24 items, created Friend QA with an independent 24-item starter library, then switched back and observed the original profile's new subject/item and selection preserved. These profiles are local developer conveniences, not real authentication. Final cached-profile naming and edit-form set preservation were checked in source/syntax after that walkthrough, without a second complete UI pass.
+
+The browser download-event adapter again failed to return despite explicit short timeouts, eventually expiring the continuation. Download completion and file chooser/restore remain **unverified**; no testing progress is inferred from that wait. API attachment headers, checksums and restore behavior pass automated tests. Do not use the broken automation wait again as evidence of an app download failure or success. Actual Android/Chrome, same-origin offline-profile/tab races and manual file download/restore remain pre-pilot smoke checks.
+
+The sections below preserve the original 0.1 evidence. No source/runtime credentials or learner data are in Git; D: is local recovery, not an off-machine backup service.
+
+## Historical 0.1 evidence
+
 Local prototype checks completed November 24–25, 2026. No deployment or actual Android test.
 
 ## Automated

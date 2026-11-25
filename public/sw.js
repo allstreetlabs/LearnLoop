@@ -1,4 +1,4 @@
-const CACHE = 'learnloop-shell-v1';
+const CACHE = 'learnloop-shell-v2';
 const SHELL = ['/', '/app.js', '/style.css', '/icon.svg', '/manifest.webmanifest'];
 self.addEventListener('install', event => event.waitUntil(caches.open(CACHE).then(c => c.addAll(SHELL))));
 // A new worker waits for existing tabs to close; never reload a live answer.

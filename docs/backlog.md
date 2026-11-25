@@ -1,6 +1,6 @@
 # MVP backlog and release boundaries
 
-November 25, 2026 · local build complete; hosted pilot not approved/deployed
+November 25, 2026 · local 0.2 build complete; hosted pilot not approved/deployed
 
 ## Implemented local slice
 
@@ -21,7 +21,7 @@ November 25, 2026 · local build complete; hosted pilot not approved/deployed
 
 The following is proposed work, not permission to host or invite friends.
 
-**Next local build proposal — LL-N00: multiple sets and personal ownership.** Introduce explicit users, sets/access, source/item revisions and per-user progress/history; migrate the existing library. Add simple create/select-set flows. Acceptance: existing 24 IDs, sources, corrections and accepted events survive migration; progress is independent per learner; new sets can be created without code or a commercial compiler; exports remain recoverable. Real sign-in and cross-user API tests in LL-N02 are still required before a hosted pilot. This implements the direction in Decision 003 without provisioning a hosted database now.
+**LL-N00 — completed local scope in 0.2: multiple sets and personal ownership.** Explicit local profiles, private learning sets, relational sources/item revisions and per-profile progress/history are implemented. Create/select-set and set-specific manual authoring work. All existing 24 IDs, source scopes, corrections, accepted events, schedules, sessions and dedupe ledger are preserved by tested migration. Eighteen tests pass, including failure rollback, independent progress and restore isolation; browser checks observed set creation/authoring and profile switching. Only private ownership is implemented; shared-set grants remain LL-N03. Local profiles are not secure sign-in; LL-N02 and actual hosted identity are still required before friends access it. No hosted database service was provisioned.
 
 1. **LL-N01 — approve a concrete host/access plan.** Confirm exact ASL domain and desired subdomain, existing runtime/durable storage, operating owner, cost, TLS, rollback and backup destination. Prefer existing suitable ASL infrastructure if verified. Do not assume Playspace. Approval is a final gate after a reviewable plan; no provisioning or deployment now.
 2. **LL-N02 — real authentication and per-person ownership.** Remove/disable local session creation in hosted mode. Invitation-only sign-in, no public registration. Every private API and backup is scoped to the authenticated owner; devices cannot choose owner IDs. Acceptance: user A cannot read/export/edit/grade/restore user B's private data through any endpoint, including guessed IDs and conflicts. Two devices for A share A's progress; two different learners do not.

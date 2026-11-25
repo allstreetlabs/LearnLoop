@@ -9,7 +9,7 @@ import { makeBackup } from '../lib/domain.mjs';
 
 test('shared server: authorization, CSRF, two clients, dedupe, conflict, restart and atomic restore',async t=>{
   const dataDir=mkdtempSync(join(tmpdir(),'learnloop-test-'));
-  let app=createApp({dataDir});await new Promise(r=>app.server.listen(0,'127.0.0.1',r));
+  let app=await createApp({dataDir});await new Promise(r=>app.server.listen(0,'127.0.0.1',r));
   let origin=`http://127.0.0.1:${app.server.address().port}`;
   const call=async(path,{cookie,data,headers={}}={})=>{
     const r=await fetch(origin+path,{method:data===undefined?'GET':'POST',headers:{...(cookie?{cookie}:{}),...(data===undefined?{}:{origin,'Content-Type':'application/json'}),...headers},...(data===undefined?{}:{body:JSON.stringify(data)})});
@@ -36,7 +36,7 @@ test('shared server: authorization, CSRF, two clients, dedupe, conflict, restart
     assert(readdirSync(dataDir).some(f=>f.startsWith('before-restore-')));
     const stale=await call('/api/action',{cookie:two.cookie,data:{...action,id:randomUUID()}});assert.equal(stale.status,400);assert.match(stale.body.error,/restored/);
     await new Promise(r=>app.server.close(r));
-    app=createApp({dataDir});await new Promise(r=>app.server.listen(0,'127.0.0.1',r));origin=`http://127.0.0.1:${app.server.address().port}`;
+    app=await createApp({dataDir});await new Promise(r=>app.server.listen(0,'127.0.0.1',r));origin=`http://127.0.0.1:${app.server.address().port}`;
     const after=await call('/api/state',{cookie:one.cookie});assert.equal(after.body.library.events.length,before.events.length);assert.equal(after.body.library.conflicts.length,1);assert.equal(after.body.library.epoch,restored.body.library.epoch);
   }finally{await new Promise(r=>app.server.close(r));assert(resolve(dataDir).startsWith(resolve(tmpdir())+sep+'learnloop-test-'));rmSync(dataDir,{recursive:true,force:true});}
 });

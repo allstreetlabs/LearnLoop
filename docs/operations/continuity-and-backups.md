@@ -12,6 +12,8 @@ Sam requested regular repository backups of active state, feature backlog, statu
 
 One daily heartbeat repeats this maintenance for the current chat. It may update evidence-backed docs and back up already-reviewed authorized work; it must not start product implementation, infrastructure or other jobs. Do not create no-op commits on unchanged days. Execution requires the local app/computer and permissions to be available; no always-on service is implied. Scheduler identity/status is recorded after creation.
 
+Confirmed automation: `back-up-learnloop-continuity`, ACTIVE, daily at 11 p.m. local Central time. The app reported creation and its view card was read back. This is the only recurring job authorized here.
+
 ## Private local recovery on D:
 
 Use only the dedicated D:\Codex\LearnLoop tree. `node scripts/backup-local.mjs --destination D:\Codex\LearnLoop\backups` writes a uniquely named checkpoint containing a source Git bundle, a transactionally consistent SQLite backup (when runtime data exists), and a manifest/checksums. It verifies the bundle plus SQLite integrity/foreign keys. It refuses to label a dirty source worktree a committed checkpoint. No destructive cleanup or retention job is configured.

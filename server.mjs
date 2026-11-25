@@ -1,23 +1,17 @@
 import http from 'node:http';
-import { DatabaseSync } from 'node:sqlite';
 import { randomBytes, randomUUID, createHash } from 'node:crypto';
-import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
+import { readFileSync, writeFileSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { seedLibrary, applyAction, validateLibrary, makeBackup, validateBackup, importContent, hash, queue, Problem } from './lib/domain.mjs';
+import { DEFAULT_OWNER, applyAction, makeBackup, validateBackup, importContent, hash, queue, Problem } from './lib/domain.mjs';
+import { openStore } from './lib/storage.mjs';
 
 const root = fileURLToPath(new URL('.', import.meta.url));
-export function createApp({ dataDir = join(root, 'data'), now = () => new Date().toISOString() } = {}) {
-  mkdirSync(dataDir, { recursive: true });
-  const db = new DatabaseSync(join(dataDir, 'learnloop.sqlite'));
-  db.exec('PRAGMA journal_mode=WAL; PRAGMA synchronous=FULL; CREATE TABLE IF NOT EXISTS library(id INTEGER PRIMARY KEY CHECK(id=1), json TEXT NOT NULL); CREATE TABLE IF NOT EXISTS actions(id TEXT PRIMARY KEY, request_hash TEXT NOT NULL, json TEXT NOT NULL); CREATE TABLE IF NOT EXISTS sessions(token TEXT PRIMARY KEY, expires INTEGER NOT NULL);');
-  if (!db.prepare('SELECT id FROM library WHERE id=1').get()) db.prepare('INSERT INTO library VALUES(1,?)').run(JSON.stringify(seedLibrary(now())));
-  const get = () => JSON.parse(db.prepare('SELECT json FROM library WHERE id=1').get().json);
-  validateLibrary(get());
-  const put = lib => db.prepare('UPDATE library SET json=? WHERE id=1').run(JSON.stringify(lib));
+export async function createApp({ dataDir = join(root, 'data'), now = () => new Date().toISOString() } = {}) {
+  const store=await openStore(dataDir,now);
+  const {db,get,put,transaction}=store;
   const digest = s => createHash('sha256').update(s).digest('hex');
-  const transaction = fn => { db.exec('BEGIN IMMEDIATE'); try { const r = fn(); db.exec('COMMIT'); return r; } catch (e) { db.exec('ROLLBACK'); throw e; } };
-  const views = lib => ({ library: lib, serverNow: now(), available: queue(lib, now()).map(i => i.id) });
+  const views = lib => ({ library: lib, profile:store.profiles().find(p=>p.id===lib.ownerId), serverNow: now(), available: queue(lib, now()).map(i => i.id) });
   async function body(req) {
     if (!/^application\/json(?:;|$)/i.test(req.headers['content-type'] || '')) throw new Problem('Use JSON for this request.', 415);
     const chunks = []; let size = 0;
@@ -40,51 +34,64 @@ export function createApp({ dataDir = join(root, 'data'), now = () => new Date()
       if (req.method === 'GET' && assets[path]) {
         const [name, mime] = assets[path]; res.writeHead(200, { 'Content-Type': mime }); res.end(readFileSync(join(root, 'public', name))); return;
       }
+      if(req.method==='GET'&&path==='/api/profiles')return json(200,{profiles:store.profiles(),localOnly:true});
       if (req.method === 'POST' && path === '/api/session') {
-        await body(req);
+        const input=await body(req);
+        if(!input || typeof input!=='object')throw new Problem('Choose a local profile.');
+        let userId=input.profileId || DEFAULT_OWNER;
+        if(input.createName!==undefined){
+          if(typeof input.createName!=='string'||!input.createName.trim()||input.createName.length>80)throw new Problem('Profile name must be 1–80 characters.');
+          userId=randomUUID();transaction(()=>store.createProfile(userId,input.createName.trim()));
+        }
+        if(!store.profiles().some(p=>p.id===userId))throw new Problem('Local profile not found. Your cached data was kept.',404);
         const token = randomBytes(32).toString('hex'); const expires = Date.now() + 30 * 86400000;
-        db.prepare('DELETE FROM sessions WHERE expires < ?').run(Date.now()); db.prepare('INSERT INTO sessions VALUES (?,?)').run(digest(token), expires);
-        json(200, views(get()), { 'Set-Cookie': `learnloop=${token}; HttpOnly; SameSite=Strict; Path=/; Max-Age=2592000` }); return;
+        db.prepare('DELETE FROM sessions WHERE expires < ?').run(Date.now()); db.prepare('INSERT INTO sessions(token,expires,user_id) VALUES (?,?,?)').run(digest(token), expires,userId);
+        json(200, views(get(userId)), { 'Set-Cookie': `learnloop=${token}; HttpOnly; SameSite=Strict; Path=/; Max-Age=2592000` }); return;
       }
       const token = /(?:^|;\s*)learnloop=([a-f0-9]{64})(?:;|$)/.exec(req.headers.cookie || '')?.[1];
-      if (!token || !db.prepare('SELECT token FROM sessions WHERE token=? AND expires>?').get(digest(token), Date.now())) throw new Problem('Open your local library to reconnect. Pending attempts are kept on this device.', 401);
-      if (req.method === 'GET' && path === '/api/state') return json(200, views(get()));
-      if (req.method === 'GET' && path === '/api/backup') return json(200, makeBackup(get()));
+      const session=token?db.prepare('SELECT user_id FROM sessions WHERE token=? AND expires>?').get(digest(token), Date.now()):null;
+      if (!session) throw new Problem('Open your local library to reconnect. Pending attempts are kept on this device.', 401);
+      const userId=session.user_id;
+      if (req.method === 'GET' && path === '/api/state') return json(200, views(get(userId)));
+      if (req.method === 'GET' && path === '/api/backup') return json(200, makeBackup(get(userId)),new URL(req.url,`http://${host}`).searchParams.has('download')?{'Content-Disposition':`attachment; filename="learnloop-backup-${new Date().toISOString().slice(0,10)}.json"`}:{});
       if (req.method === 'POST' && path === '/api/action') {
         const action = await body(req);
+        if(!action || typeof action!=='object' || Array.isArray(action))throw new Problem('A JSON action object is required.');
+        if(action?.ownerId && action.ownerId!==userId)throw new Problem('Another tab changed the local profile. Reopen your library; pending work is kept.',401);
         const result = transaction(() => {
           const key = `${action.epoch}:${action.id}`; const requestHash = hash(action);
-          const seen = db.prepare('SELECT request_hash,json FROM actions WHERE id=?').get(key);
+          const seen = db.prepare('SELECT request_hash,json FROM accepted_actions WHERE owner_id=? AND id=?').get(userId,key);
           if (seen) { if (seen.request_hash !== requestHash) throw new Problem('This action ID was reused for different work.', 409); return { ...JSON.parse(seen.json), duplicate: true }; }
-          const lib = get(); const result = applyAction(lib, action, now());
-          put(lib); db.prepare('INSERT INTO actions VALUES (?,?,?)').run(key, requestHash, JSON.stringify(result)); return result;
+          const lib = get(userId); const result = applyAction(lib, action, now());
+          put(lib); db.prepare('INSERT INTO accepted_actions VALUES (?,?,?,?)').run(userId,key, requestHash, JSON.stringify(result)); return result;
         });
-        return json(result.conflict ? 409 : 200, { ...result, ...views(get()) });
+        return json(result.conflict ? 409 : 200, { ...result, ...views(get(userId)) });
       }
       if (req.method === 'POST' && path === '/api/preview') {
-        const input = await body(req); const lib = get(); let summary;
-        if (input.mode === 'restore') { const b = validateBackup(input.file); summary = { items: b.items.length, events: b.events.length, sources: b.sources.length, drafts: b.drafts.length }; }
-        else if (input.mode === 'import') summary = importContent(lib, input.file, now());
+        const input = await body(req); const lib = get(userId); let summary;
+        if (input.mode === 'restore') { const b = validateBackup(input.file); summary = { sets:b.sets.length, items: b.items.length, events: b.events.length, sources: b.sources.length, drafts: b.drafts.length }; }
+        else if (input.mode === 'import') summary = importContent(lib, input.file, now(),input.setId);
         else throw new Problem('Choose import or restore.');
-        return json(200, { summary, previewHash: hash(input.file), libraryEpoch: get().epoch, libraryRevision: get().revision });
+        return json(200, { summary, previewHash: hash({file:input.file,mode:input.mode,setId:input.setId||null}), libraryEpoch: lib.epoch, libraryRevision: get(userId).revision });
       }
       if (req.method === 'POST' && ['/api/restore', '/api/import'].includes(path)) {
         const input = await body(req);
-        if (input.previewHash !== hash(input.file)) throw new Problem('File changed since preview. Preview it again.');
+        if (input.previewHash !== hash({file:input.file,mode:path==='/api/restore'?'restore':'import',setId:input.setId||null})) throw new Problem('File or destination changed since preview. Preview it again.');
         const result = transaction(() => {
-          const lib = get();
+          const lib = get(userId);
           if (input.libraryEpoch !== lib.epoch || input.libraryRevision !== lib.revision) throw new Problem('The library changed after preview. Preview the file again.', 409);
           if (path === '/api/restore') {
             if (input.confirmation !== 'RESTORE') throw new Problem('Type RESTORE to confirm replacement.');
             const restored = structuredClone(validateBackup(input.file));
+            restored.ownerId=userId;
             const recoveryName = `before-restore-${Date.now()}-${randomUUID()}.json`;
             writeFileSync(join(dataDir, recoveryName), JSON.stringify(makeBackup(lib), null, 2), { flag: 'wx', mode: 0o600 });
             restored.epoch = randomUUID(); restored.revision++; put(restored);
             return { message: 'Library restored. Other browser sessions must refresh.', recoveryName };
           }
-          const summary = importContent(lib, input.file, now()); put(lib); return { summary, message: 'Imported as items awaiting review. No grades were imported.' };
+          const summary = importContent(lib, input.file, now(),input.setId); put(lib); return { summary, message: 'Imported as items awaiting review. No grades were imported.' };
         });
-        return json(200, { ...result, ...views(get()) });
+        return json(200, { ...result, ...views(get(userId)) });
       }
       throw new Problem('Not found.', 404);
     } catch (e) {
@@ -92,11 +99,11 @@ export function createApp({ dataDir = join(root, 'data'), now = () => new Date()
       if (!(e instanceof Problem)) console.error(e);
     }
   });
-  server.on('close', () => db.close());
-  return { server, getLibrary: get };
+  server.on('close', () => store.close());
+  return { server, getLibrary: (owner=DEFAULT_OWNER)=>get(owner) };
 }
 if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
   const port = Number(process.env.LEARNLOOP_PORT || 8830);
-  const { server } = createApp({ dataDir: process.env.LEARNLOOP_DATA_DIR || undefined });
+  const { server } = await createApp({ dataDir: process.env.LEARNLOOP_DATA_DIR || undefined });
   server.listen(port, '127.0.0.1', () => console.log(`LearnLoop local prototype: http://127.0.0.1:${port}\nShared database: local data directory. Hosting and phone access are not configured. Ctrl+C to stop.`));
 }
