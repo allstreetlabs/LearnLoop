@@ -1,0 +1,268 @@
+{
+  "schema_version": "learnloop.content-review/0.1",
+  "pack_id": "data-center-flow-personal-v0.1",
+  "title": "How data center projects work",
+  "created_on": "2026-11-17",
+  "author": "Codex for Sam",
+  "status": "draft_for_sam_review",
+  "activation_allowed": false,
+  "purpose": "Recall and explain the lifecycle, dependencies, roles, handoffs and interacting systems. Real projects are optional illustrations.",
+  "review_guidance": "Keep, edit or drop each ID. Credit the required ideas in the learner's own words; accept defensible alternatives. These are conceptual learning items, not a site work instruction or a universal contract procedure.",
+  "sources": [
+    {"id":"S01","title":"EPA ENERGY STAR specification language for commercial new construction","url":"https://www.energystar.gov/sites/default/files/2024-08/Specification%20Language_AUG%202024_FINAL%20508.pdf","version":"August 2024","checked_on":"2026-11-17","scope":"General-building energy-performance delivery example; its certification conditions are not universal data-center requirements."},
+    {"id":"S02","title":"JLL seven stages of data center commissioning","url":"https://www.jll.com/en-us/guides/do-you-know-the-seven-stages-of-data-center-commissioning","version":"February 17, 2025","checked_on":"2026-11-17","scope":"A service provider's published commissioning framework; stage labels and numbering vary."},
+    {"id":"S03","title":"Dominion Energy Q2 2024 earnings presentation","url":"https://investors.dominionenergy.com/files/doc_financials/2024/q2/2024-08-01-DE-IR-2Q-2024-earnings-call-slides-vTC.pdf","version":"August 1, 2024; slide 24","checked_on":"2026-11-17","scope":"Historical example of one utility's connection workflow, not current universal connection rules, costs or timing."},
+    {"id":"S04","title":"DOE data centers for Tribal economic development FAQ","url":"https://www.energy.gov/indianenergy/articles/data-centers-tribal-economic-development-frequently-asked-questions","version":"May 14, 2026","checked_on":"2026-11-17","scope":"Use the general site-suitability considerations; do not generalize Tribal land or leasing provisions."},
+    {"id":"S05","title":"CBRE key factors for effective data centre site selection","url":"https://www.cbre.com/insights/articles/key-factors-to-consider-for-effective-data-centre-site-selection","version":"February 19, 2026","checked_on":"2026-11-17","scope":"Practitioner guidance with a European/hyperscale emphasis; no market forecast is required learning."},
+    {"id":"S06","title":"IBM What is a data center","url":"https://www.ibm.com/think/topics/data-centers","version":"Web page accessed November 17, 2026","checked_on":"2026-11-17","scope":"Introductory component roles; detailed electrical topology is project-specific."},
+    {"id":"S07","title":"Investigative Report on Electrical Commissioning in HPC Data Centers","url":"https://datacenters.lbl.gov/sites/default/files/Investigative_Report_on_Electrical_Commissioning_in_HPC_Data_Centers.pdf","version":"2020 IEEE paper hosted by Berkeley Lab","checked_on":"2026-11-17","scope":"Use the cited electrical-commissioning relationships; HPC-specific load characteristics are not universal."},
+    {"id":"S08","title":"DOE Best Practices Guide for Energy-Efficient Data Center Design","url":"https://www.energy.gov/sites/default/files/2024-07/best-practice-guide-data-center-design_0.pdf","version":"Revised July 2024","checked_on":"2026-11-17","scope":"Design guidance, not a prescribed design or a mandate for one cooling technology."},
+    {"id":"S09","title":"WBDG roles and responsibilities in the commissioning process","url":"https://legacy.wbdg.org/building-commissioning/roles-and-responsibilities-commissioning-process","version":"Legacy public page accessed November 17, 2026","checked_on":"2026-11-17","scope":"General building commissioning roles; actual assignments and reporting lines must be set for the project."},
+    {"id":"S10","title":"WBDG commissioning documents process contents and acceptance","url":"https://legacy.wbdg.org/building-commissioning/commissioning-documents","version":"Legacy public page accessed November 17, 2026","checked_on":"2026-11-17","scope":"General-building documentation guidance; responsibilities and deliverables vary by scope."},
+    {"id":"S11","title":"AIA-MBA Joint Committee drawings and specifications guidance","url":"https://aiambajointcommittee.org/drawings-and-specifications/","version":"Sections B-1 and B-4; revisions listed on page","checked_on":"2026-11-17","scope":"Practitioner recommendations; actual document and approval responsibilities follow the project arrangements."},
+    {"id":"S12","title":"EJCDC shop drawings and submittals Part 1 definition purpose and necessity","url":"https://ejcdc.org/shop-drawings-and-submittalspart-1-definition-purpose-and-necessityby-kevin-obeirne-pe/","version":"Public article accessed November 17, 2026","checked_on":"2026-11-17","scope":"Explanation of the US contract forms discussed in the article, not universal legal advice or every contract's rule."},
+    {"id":"S13","title":"Schneider Electric Data Center Projects Commissioning White Paper 148","url":"https://download.se.com/files?p_Doc_Ref=SPD_DBOY-6NJNK6_EN&p_File_Name=DBOY-6NJNK6_R1_EN.pdf","version":"Revision 1","checked_on":"2026-11-17","scope":"Vendor commissioning guidance. Distinguish the integrated testing step from the broader lifecycle commissioning process."}
+  ],
+  "items": [
+    {
+      "id":"DCF-01","section":"Lifecycle and dependencies","mode":"recall","status":"draft",
+      "prompt":"Sketch the route from an owner's need to an operating data center.",
+      "answer":"Needs and feasibility → design → procurement/construction → verification → handover/operation. Decisions and evidence link the stages; changed assumptions can send work back.",
+      "explanation":"Each stage produces decisions, deliverables or evidence needed downstream.",
+      "required_points":["Needs through delivery","Verification and operation","Dependencies and feedback"],
+      "basis":"cross_source_synthesis",
+      "source_refs":[{"source_id":"S01","locator":"Printed pages 2–5, pre-design through operation"},{"source_id":"S05","locator":"Site Availability Risk and Planning Certainty"},{"source_id":"S11","locator":"Section B-4, review/fabrication/delivery scheduling"}],
+      "variation":"Accept equivalent labels and sensible overlap."
+    },
+    {
+      "id":"DCF-02","section":"Lifecycle and dependencies","mode":"explain","status":"draft",
+      "prompt":"Why bring commissioning thinking into design instead of waiting until construction ends?",
+      "answer":"Define how performance will be demonstrated while the design can still respond. Commissioning planning connects the intended outcome to later tests and the operational transition.",
+      "explanation":"A final test cannot retroactively make an untestable or poorly coordinated design easy to verify.",
+      "required_points":["Plan verification early","Connect design to tested performance and operation"],
+      "basis":"applied_reasoning",
+      "source_refs":[{"source_id":"S02","locator":"Introduction and Level 0 through Level 6 list"}],
+      "variation":"Do not require JLL's stage numbers."
+    },
+    {
+      "id":"DCF-03","section":"Lifecycle and dependencies","mode":"scenario","status":"draft",
+      "prompt":"Building work is progressing, but the utility is still engineering the connection. How would you describe progress?",
+      "answer":"The building and utility workstreams are at different milestones. Track their dependency at power availability; progress on the structure does not establish that the electrical service is ready.",
+      "explanation":"Parallel workstreams must converge before activities depending on that service can proceed.",
+      "required_points":["Separate workstreams","Shared dependency at service readiness"],
+      "basis":"applied_reasoning",
+      "source_refs":[{"source_id":"S03","locator":"Slide 24, contact-to-connection workflow"}],
+      "variation":"The 2024 utility example illustrates the principle; it is not today's universal process."
+    },
+    {
+      "id":"DCF-04","section":"Lifecycle and dependencies","mode":"scenario","status":"draft",
+      "prompt":"The owner changes the expected building use during design development. Should the earlier performance assumptions stay fixed?",
+      "answer":"Revisit the assumptions and evaluate the design against the revised goals. Carry agreed changes into the later design documents and verification criteria.",
+      "explanation":"A project phase refines earlier decisions; it does not make changed requirements disappear.",
+      "required_points":["Reassess assumptions","Propagate agreed changes"],
+      "basis":"applied_reasoning",
+      "source_refs":[{"source_id":"S01","locator":"Printed page 3, Design Development and Construction Documents"}],
+      "variation":"Adapted from energy-performance guidance; approval routes are project-specific."
+    },
+    {
+      "id":"DCF-05","section":"Feasibility and enabling conditions","mode":"recall","status":"draft",
+      "prompt":"Before detailed design, what makes a site suitable beyond having enough land?",
+      "answer":"Check power access, network connectivity, the cooling approach and resource needs, expansion space, and the site's land-use or permitting context.",
+      "explanation":"A parcel must support the intended facility and its external dependencies.",
+      "required_points":["Power and connectivity","Cooling/resources","Space and site constraints"],
+      "basis":"source_summary",
+      "source_refs":[{"source_id":"S04","locator":"What makes a good site for a data center; How much land does a data center use"}],
+      "variation":"These are considerations, not a universal fixed checklist."
+    },
+    {
+      "id":"DCF-06","section":"Feasibility and enabling conditions","mode":"explain","status":"draft",
+      "prompt":"Why can a cheap site become a poor data-center choice?",
+      "answer":"Purchase price is only one input. Power delivery, connectivity, resilience, expansion and operating costs can make the site unsuitable or expensive over its life.",
+      "explanation":"Site choice shapes both delivery and long-term operation.",
+      "required_points":["Whole-life suitability and cost","Infrastructure constraints"],
+      "basis":"source_summary",
+      "source_refs":[{"source_id":"S05","locator":"Why Site Selection Matters; Total Cost of Ownership Considerations; Site Availability Risk and Planning Certainty"}],
+      "variation":"The source emphasizes European/hyperscale development; avoid memorizing its market forecasts."
+    },
+    {
+      "id":"DCF-07","section":"Feasibility and enabling conditions","mode":"scenario","status":"draft",
+      "prompt":"A team sees a nearby substation and assumes usable power will be available on its opening date. What is missing?",
+      "answer":"Evidence of the required connection capacity, engineering, infrastructure work and service arrangements. Physical proximity alone does not establish delivery readiness or timing.",
+      "explanation":"The utility example separates assessment, engineering, construction and service arrangements.",
+      "required_points":["Verify capacity and connection work","Confirm service readiness and timing"],
+      "basis":"applied_reasoning",
+      "source_refs":[{"source_id":"S03","locator":"Slide 24, assessment/engineering/infrastructure/service agreement"}],
+      "variation":"Historical process illustration only; do not infer a universal contract or lead time."
+    },
+    {
+      "id":"DCF-08","section":"Feasibility and enabling conditions","mode":"scenario","status":"draft",
+      "prompt":"Two proposed sites have similar land area, but different water and fiber access. Can you treat them as equivalent?",
+      "answer":"No. Compare their suitability for the intended cooling and connectivity needs, including additional infrastructure and constraints. Equal land area does not mean equal feasibility.",
+      "explanation":"Cooling technology and network access change what the location must support.",
+      "required_points":["Cooling/resource fit","Connectivity and infrastructure fit"],
+      "basis":"applied_reasoning",
+      "source_refs":[{"source_id":"S04","locator":"What makes a good site for a data center, water and fiber considerations"}],
+      "variation":"Do not assume one water demand or fiber-distance rule fits every project."
+    },
+    {
+      "id":"DCF-09","section":"Physical systems and interfaces","mode":"recall","status":"draft",
+      "prompt":"What different roles do an uninterruptible power supply and a backup generator commonly play?",
+      "answer":"The UPS supports continuity through short interruptions and power disturbances; a generator can support a longer loss of the normal supply when the designed backup arrangement takes over.",
+      "explanation":"They address related but different parts of power continuity.",
+      "required_points":["Short interruption support","Longer backup supply"],
+      "basis":"source_summary",
+      "source_refs":[{"source_id":"S06","locator":"Power supply and cable management"}],
+      "variation":"UPS technologies and transfer arrangements differ; this is not an electrical switching sequence."
+    },
+    {
+      "id":"DCF-10","section":"Physical systems and interfaces","mode":"explain","status":"draft",
+      "prompt":"Why should a power-continuity discussion include cooling equipment?",
+      "answer":"Cooling equipment such as pumps and fans also needs electricity. Keeping IT energized does not by itself demonstrate that the supporting cooling will remain available.",
+      "explanation":"The facility depends on connected systems, not only the server's power supply.",
+      "required_points":["Cooling has electrical dependencies","Assess the combined system"],
+      "basis":"applied_reasoning",
+      "source_refs":[{"source_id":"S07","locator":"Printed page 520, Electrical Commissioning opening paragraphs"}],
+      "variation":"The cited report concerns HPC; do not generalize its specific load profiles."
+    },
+    {
+      "id":"DCF-11","section":"Physical systems and interfaces","mode":"scenario","status":"draft",
+      "prompt":"The cooling equipment has adequate nameplate capacity, but neighboring units respond inconsistently. What could still be wrong?",
+      "answer":"The control settings, sensor information or coordination may be wrong. Check how the units respond together to load and conditions, rather than assuming capacity alone proves correct operation.",
+      "explanation":"Controls turn installed equipment into a coordinated operating system.",
+      "required_points":["Capacity differs from control performance","Check coordinated response"],
+      "basis":"applied_reasoning",
+      "source_refs":[{"source_id":"S08","locator":"Printed pages 22–23, section 5.8 Controls"}],
+      "variation":"A conceptual diagnosis prompt, not instructions for changing live settings."
+    },
+    {
+      "id":"DCF-12","section":"Physical systems and interfaces","mode":"scenario","status":"draft",
+      "prompt":"The building footprint stays the same, but the planned IT load rises sharply. What must be revisited?",
+      "answer":"Reassess electrical and cooling capacity against the revised load and its distribution. Unchanged floor area does not establish adequate supporting infrastructure.",
+      "explanation":"IT demand drives requirements for the systems serving it.",
+      "required_points":["Revised electrical demand","Revised cooling demand"],
+      "basis":"applied_reasoning",
+      "source_refs":[{"source_id":"S08","locator":"Printed page 2, section 2 IT Systems; printed page 24, section 6 Electrical Systems"}],
+      "variation":"Do not assume a fixed watts-per-area value or prescribe one cooling solution."
+    },
+    {
+      "id":"DCF-13","section":"Roles and handoffs","mode":"recall","status":"draft",
+      "prompt":"Summarize the owner's, designer's, contractor's and commissioning provider's different contributions.",
+      "answer":"The owner sets and accepts requirements; designers develop the solution; contractors deliver and document installation/testing; the commissioning provider coordinates verification against the agreed goals.",
+      "explanation":"Clear interfaces prevent responsibility from disappearing between organizations.",
+      "required_points":["Owner requirements/acceptance","Design and delivery roles","Verification coordination"],
+      "basis":"source_summary",
+      "source_refs":[{"source_id":"S09","locator":"The Commissioning Management Team; Architect; Engineer; Contractor/Construction Manager"}],
+      "variation":"A role map, not a fixed contract or reporting structure."
+    },
+    {
+      "id":"DCF-14","section":"Roles and handoffs","mode":"explain","status":"draft",
+      "prompt":"How do the Owner's Project Requirements and Basis of Design differ?",
+      "answer":"The OPR describes the outcomes and criteria the owner needs. The BOD explains the design team's technical approach for meeting them.",
+      "explanation":"They connect the reason for the facility to the proposed solution.",
+      "required_points":["OPR: intended outcomes","BOD: technical response"],
+      "basis":"source_summary",
+      "source_refs":[{"source_id":"S10","locator":"Documentation Contents, Owner's Project Requirements and Basis of Design"}],
+      "variation":"Learn the distinction; exact document names and scope may vary."
+    },
+    {
+      "id":"DCF-15","section":"Roles and handoffs","mode":"scenario","status":"draft",
+      "prompt":"A commissioning review finds a design issue. Does that automatically make the commissioning provider the designer or installer?",
+      "answer":"No. Route the issue to the responsible design or construction party for resolution, with verification and owner decisions through the agreed process.",
+      "explanation":"Finding an issue does not transfer every delivery responsibility to the reviewer.",
+      "required_points":["Keep role boundaries clear","Route and verify resolution"],
+      "basis":"applied_reasoning",
+      "source_refs":[{"source_id":"S09","locator":"Commissioning Provider; Architect; Engineer; Contractor/Construction Manager"}],
+      "variation":"Specific duties follow the project's assignments."
+    },
+    {
+      "id":"DCF-16","section":"Roles and handoffs","mode":"scenario","status":"draft",
+      "prompt":"A cooling-equipment change is agreed within one team. What handoff should happen before affected installation continues?",
+      "answer":"Coordinate the revised requirements with the affected designers, installers and site team; check the interfaces and update the information they will use.",
+      "explanation":"A local change can invalidate another team's installation assumptions.",
+      "required_points":["Identify affected interfaces","Communicate current requirements"],
+      "basis":"applied_reasoning",
+      "source_refs":[{"source_id":"S13","locator":"Printed pages 6–7, site coordination and installation prerequisites"}],
+      "variation":"Exact approval authority follows the project process."
+    },
+    {
+      "id":"DCF-17","section":"Design procurement and construction","mode":"recall","status":"draft",
+      "prompt":"What is the purpose of a contractor's product-data or shop-drawing submittal?",
+      "answer":"It presents proposed equipment or execution details for the required review against the project documents, helping turn design requirements into a coordinated delivery proposal.",
+      "explanation":"Product selection and fabrication details need a review interface.",
+      "required_points":["Proposed delivery details","Review against requirements"],
+      "basis":"source_summary",
+      "source_refs":[{"source_id":"S12","locator":"What are and are not Submittals; discussion following contract-form definitions"}],
+      "variation":"Terminology and required submissions depend on the contract."
+    },
+    {
+      "id":"DCF-18","section":"Design procurement and construction","mode":"explain","status":"draft",
+      "prompt":"Why does the delivery schedule need time for submittal review before fabrication and delivery?",
+      "answer":"The proposed equipment and coordinated details need review before downstream commitments. Planning that sequence reduces late discoveries and schedule disruption.",
+      "explanation":"An arrival date alone hides the decisions needed to make delivery usable.",
+      "required_points":["Review precedes downstream commitments","Include review/fabrication/delivery dependencies"],
+      "basis":"applied_reasoning",
+      "source_refs":[{"source_id":"S11","locator":"Section B-4, Submission, submittal log and interrelated items"}],
+      "variation":"Avoid inventing standard review durations."
+    },
+    {
+      "id":"DCF-19","section":"Design procurement and construction","mode":"scenario","status":"draft",
+      "prompt":"A substitution differs from a specified requirement. Can an ordinary submittal review simply replace the agreed requirement?",
+      "answer":"Do not assume so. Identify the deviation and use the project's authorized clarification or change process before treating the requirement as altered.",
+      "explanation":"In the US forms discussed, submittals communicate compliance proposals; they are not themselves contract changes.",
+      "required_points":["Make the deviation explicit","Use the authorized change route"],
+      "basis":"applied_reasoning",
+      "source_refs":[{"source_id":"S12","locator":"Discussion distinguishing submittals from contract documents and change orders"}],
+      "variation":"The source's contract-form context matters; do not infer every contract's legal effect."
+    },
+    {
+      "id":"DCF-20","section":"Design procurement and construction","mode":"scenario","status":"draft",
+      "prompt":"A concealed service route changes during construction. Why isn't a verbal update enough?",
+      "answer":"Record the significant installed change and pass accurate information into the project's controlled record documents for future users.",
+      "explanation":"Hidden work becomes difficult to reconstruct after construction.",
+      "required_points":["Capture the installed change","Preserve usable record information"],
+      "basis":"applied_reasoning",
+      "source_refs":[{"source_id":"S11","locator":"Section B-1, Recording Significant Changes Made During Construction"}],
+      "variation":"Record-drawing accuracy and responsibility must be defined; drawings are not guaranteed exact surveys."
+    },
+    {
+      "id":"DCF-21","section":"Commissioning handover and operations","mode":"recall","status":"draft",
+      "prompt":"What remains unproven when every component has passed its individual start-up check?",
+      "answer":"Whether the components interact correctly as the intended facility system under the agreed conditions.",
+      "explanation":"Interfaces and control responses can fail even when components work alone.",
+      "required_points":["System interactions","Performance against intended conditions"],
+      "basis":"source_summary",
+      "source_refs":[{"source_id":"S13","locator":"Printed pages 2–3, Definition of commissioning and Figure 2"}],
+      "variation":"The test scope must follow the actual facility requirements."
+    },
+    {
+      "id":"DCF-22","section":"Commissioning handover and operations","mode":"explain","status":"draft",
+      "prompt":"Why separate component/functional checks, integrated testing and transition to operations in a commissioning plan?",
+      "answer":"They answer different readiness questions: does equipment function, do systems work together, and can the facility move into operation? One label or test result should not stand in for all three.",
+      "explanation":"Separating the purposes makes gaps in readiness easier to see.",
+      "required_points":["Different verification purposes","Operational transition is explicit"],
+      "basis":"applied_reasoning",
+      "source_refs":[{"source_id":"S02","locator":"Level 3 through Level 6 list"}],
+      "variation":"This uses JLL's framework as an illustration, not a universal stage numbering scheme."
+    },
+    {
+      "id":"DCF-23","section":"Commissioning handover and operations","mode":"scenario","status":"draft",
+      "prompt":"The supplier shows a passed factory test and says site acceptance is therefore complete. What evidence is still needed?",
+      "answer":"Evidence of condition and correct installation after shipment, plus the required checks of operation on site and within the assembled system.",
+      "explanation":"Factory evidence does not show what happened during transport, installation or system integration.",
+      "required_points":["Post-delivery/site condition","Installed and integrated operation"],
+      "basis":"applied_reasoning",
+      "source_refs":[{"source_id":"S07","locator":"Printed page 520, Electrical Commissioning, start-up and acceptance paragraphs"}],
+      "variation":"Exact site acceptance and integrated-test scope remains project-specific."
+    },
+    {
+      "id":"DCF-24","section":"Commissioning handover and operations","mode":"scenario","status":"draft",
+      "prompt":"Operations receives a passing-test certificate, but no useful systems information or training. What is missing from the handoff?",
+      "answer":"The agreed operating knowledge: current system/design information, procedures, test and issue records, maintenance information and training needed to use the facility.",
+      "explanation":"Handover must preserve how the delivered system is understood and operated.",
+      "required_points":["Current operating/system information","Verification and unresolved-issue record","Training and maintenance information"],
+      "basis":"applied_reasoning",
+      "source_refs":[{"source_id":"S10","locator":"Documentation Matrix, Systems Manual and Training Plans; Documentation Contents"}],
+      "variation":"Required deliverables and acceptance are set for the project."
+    }
+  ]
+}

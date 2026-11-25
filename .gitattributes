@@ -1,0 +1,3 @@
+* text=auto eol=lf
+# Preserve the exact reviewed authoring file and its recorded checksum.
+content/data-center-flow.v0.1.json -text

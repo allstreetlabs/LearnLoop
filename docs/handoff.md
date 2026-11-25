@@ -1,0 +1,42 @@
+# LearnLoop build handoff
+
+Updated November 25, 2026. Owner: Sam. Lane: planning/design/engineering. Profile: local build. Hosting approval absent.
+
+## Recover first
+
+1. Open https://github.com/allstreetlabs/LearnLoop and inspect its live branch state. Sam created the repository during this build; cloning found it empty, and a later ref check still found no remote branches. Local checkout: `C:\Users\studi\Documents\Codex\2026-11-17\you-are-the-learnloop-planning-design\work\LearnLoop`, branch `build/local-prototype`. Check `git status`, `git log -1` and origin before changing anything. Local code must not be mistaken for a remote publication.
+2. Read `AGENTS.md`, README, `docs/product/brief.md`, `docs/architecture/overview.md`, ADR 002, backlog and verification. The old planning ADR is historical; Sam's latest build and staged-learning instructions supersede its no-build/free-response-only exclusions.
+3. Run the local launch helper or `node server.mjs` with Node 24; dependencies are installed in this checkout. A fresh clone needs the pinned dependency installed. Default address `http://127.0.0.1:8830`; default private database `data/learnloop.sqlite`. QA used a separate directory. Do not turn local owner sessions into internet authentication.
+4. Recheck AgenticHQ. Search `LearnLoop`; exact ThinkTankItem ID supplied by Sam: `cmwl65dld00014v92tk0dd7rr`. Latest connected-account reads returned `not_found`, correlation `3efe7f26-dd6a-4e0c-9a9c-d61370bd7ac7`; name search returned an empty record list after authentication retry. No project/task/handoff/report was created or claimed linked. Ask the HQ steward to reconcile account/workspace/ID; do not create duplicates on an inconclusive read.
+
+## Source-of-truth and provenance
+
+Sam's current instruction governs direction/approvals. Product repo owns implementation. AgenticHQ owns operational tasks and approvals. Shared-sync owns cross-agent continuity. SAMOS is navigation/provenance, not a task store.
+
+- Shared-sync checkout: sibling `shared-sync`, active master. Initial read this turn refreshed origin to `c5d192cdf1de335634dc68cbe3c91036ad982ed9`; final fast-forward is `22da2011e9137e0234a0eebf8218f022b1278690`. Prior local LearnLoop drafts and append-only November 17 daily entries were saved, remote additions fast-forwarded, and local daily suffix restored. Recovery copies are in the parent work/daily-recovery directory. New build continuity/daily notes remain local, not pushed.
+- Procedures: `procedures/project-lane-kickoff-and-chat-recovery.md`, `procedures/repo-boundaries-and-sync-rules.md`, shared README. Product kickoff docs now live here. Operational HQ lineage is explicitly incomplete.
+- SAMOS checked revision `c7f052de01f3c3108d77a3f3fac3ce4ed08467fe`: AGENTS, START_HERE, SOURCE_MAP, GOVERNANCE, IMPROVEMENT_LANE and PROJECT_REGISTRY. No LearnLoop navigation entry found at the checked revision. No SAMOS task or runtime readiness inferred.
+- Initial Ziggy specification: https://github.com/allstreetlabs/allstreetlabs-shared/blob/3f5f13d/projects/learnloop-spec.md. Optional compiler path, not a build dependency. The personal brief and staged flow here supersede its commercial/120-item emphasis.
+- Planning packet: sibling shared-sync `projects/learnloop/`, original mockup under `design/`. No Drive project source, Codex Sources registration, published HQ lineage, domain, deployed runtime or host credentials established by this build.
+
+## Locked direction
+
+Android/Chrome priority; usable PC; shared library/progress per learner. First set teaches normal data-center project flow, roles, dependencies and interacting systems, not live-project intelligence. Real projects may illustrate. First 24 items plus sources, not a commercial course pipeline. Source scopes/corrections visible, short calm sessions, recognition distinct from production recall.
+
+Sam approved a local prototype using the 24 candidates on November 24, adding Review → choice → repetition → entered/aloud answers and checking. The original pack is retained unchanged; its old `activation_allowed:false` represents the earlier authoring-review stage, not a ban overriding Sam's new instruction. It has not gained expert certification. Choice checks are new draft content to review separately.
+
+Latest direction: ASL subdomain, regular personal learning and a few friends. Prepare an invitation-only pilot with shareable sets and private per-person progress. This does not authorize deployment, infrastructure, money, invitations or jobs. Keep that approval separate.
+
+## Verified local milestone
+
+24-item responsive PWA; review/choice/interleaved-repeat/free-response flow; pinned FSRS; required-idea self-check; due queue and daily caps; persistent SQLite shared library; sources and revisions; note capture/manual items; offline due recall/outbox; explicit conflicts; content JSON import and full JSON backup/atomic restore. Twelve automated tests plus syntax checks pass. Browser walkthrough covered core learning, two storage origins, offline reload/recovery and note conversion. See verification for exact limits and final safeguards not browser-regressed. Browser backup download automation stalled; do not report that path tested.
+
+## Next concrete action
+
+Finish a fresh manual browser smoke test of the final build, especially full backup download → preview → restore and same-origin offline tabs. Sam reviews choice distractors and tries a short session. Then prepare a concrete ASL-subdomain pilot plan: exact host/domain/runtime, identity and invitation flow, per-user ownership, shared-set correction policy, storage/recovery, cost and rollback. Approval is the final step before any provisioning or deployment. Actual Android testing requires the approved access path; never expose this loopback owner endpoint as-is.
+
+Useful later: content-only CSV exchange, richer capture, cosmetic corrections, verified optional Ziggy import. Deferred: public signup, billing/certification, Playspace dependency, semantic grading, audio, autonomous jobs, rich extraction/OCR.
+
+## Closeout rules
+
+At a material milestone update product docs, shared continuity and the current Chicago daily entry. Report working/local-committed/pushed/read-back status separately. Recheck remote/HQ state on recovery. Do not push or publish based on the existence of a local commit. The current build is local only, with a portable source archive and screenshots under the conversation's outputs folder.
