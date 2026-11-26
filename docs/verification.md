@@ -1,6 +1,33 @@
 # Verification and limits
 
-## Current milestone — 0.3, November 25, 2026
+## Current 0.4 authentication build — November 25, 2026
+
+38 automated tests pass on Windows/Node 24.22.3 and local Ubuntu as ordinary user studio (UID1000), using isolated native /tmp databases. Windows fixtures use the dedicated D: tests tree. All syntax checks pass; the pinned production dependency audit reports no known vulnerabilities at this check. This is functional/security regression evidence, not an independent security audit or live release acceptance.
+
+New checks exercise real RS256-signed fixture identities through the HTTP endpoints and jose validator: state/cookie binding, one-time consumption, expiry and cancellation; signature/issuer/audience/nonce/authorized-party/email checks; invite denial; stable-subject enrollment and email reassignment refusal; two sessions reconnecting to a byte-equivalent library with a real Good FSRS card/history; cross-owner action/export/restore isolation; legacy-cookie refusal; persistent sessions, allowlist revocation, logout/storage headers; canonical proxy/origin checks, request limits and public health with no learner data. Invalid owner startup rolls back auth tables without changing content. The actual service pre-start command rejects incomplete config or unsafe data paths without printing credentials.
+
+Chrome/Windows phone-sized walkthrough used only test/support/hosted-preview.mjs on localhost:8940 and D:/Codex/LearnLoop/tests/learnloop-hosted-browser-jmPz0W. This fixture signs a fictional QA identity and substitutes the provider navigation locally; it makes no real Google requests and supplies no live credentials. Observed:
+
+- Sign-in page has invitation/privacy explanation and unchecked personal-device offline option; no local profile picker.
+- Checked offline consent, completed the fictional identity flow, entered the original 24 library and accepted a review.
+- Stopped server, reloaded into the opted-in cache, captured a fictional note offline and saw one pending.
+- Restarted the same isolated fixture, reconnected and saw zero pending; prior review and captured note remained.
+- A second tab opened the same accepted state. Explicit sign-out returned both tabs to the login screen.
+- Signed in again with offline consent left off; prior progress/note were retained. Server-stop/reload showed login rather than the private library.
+- Library DOM width and scrollWidth both 375 CSS pixels (requested 390 viewport). Temporary viewport reset; all owned preview processes stopped.
+
+Screenshots outside Git: learnloop-v04-signin-phone.jpg and learnloop-v04-account-phone.jpg. The sign-in status label was subsequently clarified from Offline copy to Sign in. Persisted-denial and in-flight-account generation guards were added after the browser walkthrough, then source/syntax/helper checks were rerun; no second complete browser pass is claimed for those final guards. No native file download/file chooser adapters were used.
+
+The official Node 24.22.3 Linux x64 archive was downloaded and SHA-256 checked against its official HTTPS manifest, then run locally from D:; no HQ runtime installed. Hash: 4f2b175a6d53a5c617a80dba2676238a0688cef28c6da4eba35c7d844e66fcfb. Local Linux tests are not real HQ systemd/Caddy/TLS acceptance.
+
+Pre-auth checkpoint: D:/Codex/LearnLoop/backups/2026-11-26T01-15-13-144Z-d330d8e0, source a1d4c1e. Its directory timestamp is UTC; user-facing work date is November 25 Central. Normal local launch/health/assets passed. All 12 content/progress tables remain identical to the checkpoint: 24 items, one set, 13 sources, zero events; integrity/foreign keys clean, no auth tables added. Original content file SHA-256 is unchanged. Normal private data was not used for QA or mapped to a Google account. Final source/checkpoint receipt accompanies the build outputs.
+
+Still required: real private Google client/account setup and branding/consent review, successful real Google login/callback, final persistent-denial and in-flight client smoke, actual Android/Chrome, signed-in HTTPS cache/logout behavior, native file save/restore, Linux service/resource/proxy regression, approved off-machine restore and explicit server deployment approval. DNS is already user-created and verified; no other host/provider changes were made.
+
+Earlier milestones below remain historical evidence.
+
+
+## Historical milestone — 0.3, November 25, 2026
 
 Twenty-eight automated tests pass under Node 24.22.3. This retains all 18 earlier tests and adds format/alias/order validation, escaped rendering/hidden answers, optional/deduplicated example installation with original-24 preservation, practice-history/scheduler separation with null and existing cards, stale schedule versus changed content behavior, bounded/paused/concurrent preferences and future-only recall-first, version-3/legacy backup compatibility, source/context preservation on edit and a full HTTP refinement test. HTTP checks cover expected-owner backup guards, idempotency, destination-bound preview and owner-isolated restore. All JavaScript syntax checks pass. No new dependency or SQL migration.
 

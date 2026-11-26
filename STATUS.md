@@ -4,41 +4,27 @@ Updated November 25, 2026 · owner Sam · local build lane
 
 ## Current milestone
 
-**0.3.0 local refinement complete.** Research compared learning-method evidence and official Anki, Quizlet, RemNote and Duolingo documentation. Built optional authored fill-the-gap/process-ordering practice, personal pace/recall-first preferences, clearer Today/returns/empty states and pasted-JSON recovery. Extra practice stays separate from production recall. Original 24 items and 13 source records are preserved; three optional examples install into a separate set only on request.
+**0.4.0 Google identity and hosted-security implementation built/tested locally.** Includes one-time state/PKCE/nonce, signed identity validation, private invitation→existing-library mapping, separate hosted sessions, owner isolation, hosted profile-picker removal, canonical HTTPS proxy/origin checks, rate limits, health/readiness and sign-out/device-cache controls. Default PC launch stays local. Original24 items, sources, learning history and schema 2 are preserved; auth tables are created only in hosted mode after a private snapshot.
 
-**28 tests pass**, plus syntax and whitespace checks. Browser checks observed both modes, keyboard ordering, format correction/authoring, preferences, recall-first progression, upcoming return, offline pending/reconnect and pasted-JSON preview/confirmed restore. Actual Android, native save/chooser/clipboard copy, light theme, zoom/screen-reader and same-origin offline-tab races remain open. Software verification does not demonstrate learning efficacy.
+**38 tests pass on Windows and local Ubuntu/Node 24.22.3**, plus syntax checks. Dependency audit reports no known vulnerabilities at this check. Browser uses a fictional signed-identity fixture: login, review, opted-in offline reopen/note sync, other-tab sign-out, retained progress and opt-out offline lock observed. Final persisted-denial/in-flight guards were source/syntax/helper checked after walkthrough; later client smoke remains. This is not a live Google/TLS/HQ acceptance or independent security audit.
 
-No SQL migration or new dependency. Library schema remains 2; new backup schema 3 accepts prior 1/2 files. Normal library is separate from D: QA: original 24 items/one set/zero learning events. Local profiles are development conveniences, not secure identity.
-
-## Status
+## Status and next gate
 
 | Area | State / next gate |
 | --- | --- |
-| Personal recall prototype | Built/tested locally; Sam uses it and reviews content/choices separately from usability |
-| Extra formats / pace / JSON recovery | Built/tested in 0.3; review derived examples and assess friction |
-| Multiple sets / personal ownership | Built in 0.2, preserved; real sign-in/shared-set policy before friends |
-| Source/status continuity | Normal branch commit/push/readback at closeout; receipt outside Git |
-| Private recovery | Pre-refinement D: checkpoint verified; final clean-source checkpoint at closeout |
-| Daily continuity | ACTIVE back-up-learnloop-continuity, 11 p.m. local; requires app/computer/permissions |
-| ASL subdomain / personal pilot | Sam added DNS: learn A → 162.35.191.47, TTL 3600, verified against both authoritative servers and 1.1.1.1. Google login + ASL HQ selected; plan/templates prepared. Hosted auth/Node 24/recovery work and provider/server deployment approval remain open |
-| Avala / Intel Hub / Talent Network | Future candidates, no connection assumed |
-| Social / subscriptions / native app | Future candidates after personal use/small pilot evidence |
-| AgenticHQ | Unresolved: supplied Think Tank ID not found, later searches repeatedly requested auth; reconcile without duplicates |
+| Personal learning / formats / pace / JSON recovery | Implemented through 0.3, preserved and regressed in 0.4 |
+| Hosted Google identity / private ownership | Built/tested locally; private Google client + first account/consent/branding and live callback still needed |
+| Device privacy / offline | Opt-in personal-device reopening, expiry/denial gate, explicit clear-device logout; actual HTTPS/Android and final-guard client smoke open |
+| ASL hostname / host choice | learn.allstreetlabs.com + ASL HQ selected; user-added A→162.35.191.47 TTL3600 independently verified |
+| Runtime / deployment | Node 24.22.3 Linux x64 archive checked against official SHA256 manifest and used only locally; HQ still unmodified |
+| Recovery | Pre-auth D: checkpoint verified; final source/private checkpoint at closeout; off-machine destination/restore/job approval open |
+| Source/status continuity | Normal branch commit/push/readback at closeout; final receipt in delivered outputs |
+| Daily continuity | Existing continuity-only heartbeat; no new jobs created |
+| AgenticHQ | Exact item still not_found after auth retry (5ae073e0-52de-4cbf-a664-ef9e83fa5158); no duplicate |
+| Friends / social / subscriptions / Avala / Intel / native app | Later candidates, no invitation/integration or commercial work |
 
-## Next useful work
+Next: private Google client/account setup, late client/actual-device smoke, exact off-machine recovery and concrete deployment review. Source/runtime artifact, provider/server/backup changes and acceptance/rollback must be reviewable before final approval. Do not expose local mode or the test fixture on HQ.
 
-Try Today with the normal library; Practice → Add source-linked examples is optional. Review the derived examples for source support independently from client usability. Finish device/native-file/accessibility/multi-tab checks without stalled download-event adapters. Use the equal-time seven-/21-day validation plan and keep overlapping examples out of the control. Quick capture and safe grade undo are next candidates before more modes.
+Start with README, AGENTS, docs/handoff.md, docs/backlog.md, ADR 006, docs/verification.md and docs/operations/asl-hq-deployment-plan.md. Private runtime data stays ignored under data/; QA stays in isolated D:/Codex/LearnLoop/tests or local Ubuntu /tmp. Normal launch: node server.mjs at 127.0.0.1:8830. All owned previews stopped.
 
-Hosting remains separate. Android cannot reach this PC's loopback address. Shared progress is demonstrated across sessions on the same server/profile; phone/PC access still needs approved hosting/authentication.
-
-## Recovery
-
-- Start: README.md, AGENTS.md, docs/handoff.md.
-- Backlog: docs/backlog.md; decisions: docs/decisions/; research: docs/research/2026-11-25-learning-methods-and-app-review.md.
-- Architecture: docs/architecture/overview.md; evidence: docs/verification.md; experiment: docs/validation-plan.md.
-- Policy: docs/operations/continuity-and-backups.md. Ignored runtime data under data/; never commit learner records/exports/sessions/credentials.
-- Launch: node server.mjs, http://127.0.0.1:8830. Owned QA server stopped. QA: D:/Codex/LearnLoop/tests/browser-v03.
-- Verified baseline before refinement: source/remote 60fee107d1c94c274bd7c6841d568668d4037b52; pre-change checkpoint D:/Codex/LearnLoop/backups/2026-11-25T18-43-05-187Z-6e53e041.
-- Final source/remote SHA and private checkpoint receipt: delivered outputs/learnloop-checkpoint.json outside Git. Recheck live state before resuming.
-
-Authorization: local building/testing/refinement, dedicated D: use, normal source/doc branch pushes and regular continuity. No infrastructure, spend, hosting/deployment, invitations, new autonomous build jobs or commercial pipeline. AgenticHQ owns operations/approvals, shared-sync continuity, SAMOS navigation/provenance; checked historical revisions in the handoff are not current-state claims.
+Authorization: local building/testing/refinement, dedicated D: use, normal source/doc backups and existing continuity maintenance. DNS was added by Sam. No other infrastructure, provider configuration, deployment, spend, invitations or autonomous jobs were authorized/executed.

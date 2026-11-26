@@ -1,5 +1,18 @@
 # LearnLoop build handoff
 
+## Current 0.4 build — Google identity and hosted security
+
+Local implementation/testing authorized by Sam's “ok lets go”; provider/server deployment hold remains. New lib/config.mjs, google.mjs and auth.mjs implement explicit hosted mode, signed Google OIDC identity, one-time browser-bound state/PKCE/nonce, immutable issuer+subject ownership, private invitation→existing-library mapping, separate hashed sessions, logout, canonical loopback proxy/origin checks and bounded rate limits. No public profile/session creation in hosted mode. Normal PC launch remains local.
+
+The private LEARNLOOP_GOOGLE_ACCOUNTS JSON allowlist is required (empty fails), alongside Google client credentials/origin. Use one sub OR authoritative email and existing ownerId per entry. Do not commit real account values. Map Sam to local-owner to preserve the existing library; initial third-party email needs a stable subject pin. First hosted open creates a private pre-auth SQLite snapshot and auth tables without changing library schema 2. Learning JSON backups omit auth/session tables; full SQLite recovery must revoke hosted_sessions/oauth_transactions before returning online.
+
+Client verifies owner before opening cache online; offline boot is opt-in for a personal device, expiry-bound and denied after remembered auth failure. Sign-out explicitly clears saved drafts/cache after pending work syncs and locks other tabs. Private browser caches are not encryption. Read ADR 006 and verification for the final guards not fully browser-regressed.
+
+38 tests pass on Windows and local Ubuntu/Node 24.22.3, syntax checks pass and package advisory audit reports no known vulnerabilities. Browser signed-fictional-identity QA observed login, learning, opted-in offline boot/note outbox/reconnect, other-tab logout, retained progress and opt-out offline lock. No actual Google/Caddy/HTTPS/device acceptance. Test helper is loopback-only and never imported by production. All previews stopped.
+
+Next: obtain Sam's first account/private Google project setup, finish provider/branding + late client smoke, select/verify off-machine recovery and exact deployment artifact. Runtime Linux24.22.3 digest is pinned in deploy/asl-hq/runtime.json; not installed on HQ. The reviewed server/provider/backup changes still need explicit final approval. DNS learn→162.35.191.47 is already verified. Latest HQ item read still not_found, correlation5ae073e0-52de-4cbf-a664-ef9e83fa5158; no duplicate records created.
+
+
 ## DNS completed by Sam — November 25
 
 Sam reported adding the GoDaddy record. Independent read-only checks against ns73.domaincontrol.com, ns74.domaincontrol.com and 1.1.1.1 all returned learn.allstreetlabs.com A = 162.35.191.47, TTL 3600. DNS is complete at this observation; earlier absent-record/held-DNS statements below are historical. This is not TLS, Google login or app-deployment acceptance. No agent DNS/server/provider changes made; prior deployment/provider approval boundaries remain. Next engineering gate is hosted identity/security implementation and tests, followed by the reviewed deployment/recovery approval package.

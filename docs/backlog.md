@@ -1,5 +1,19 @@
 # MVP backlog and release boundaries
 
+## Completed local 0.4 identity/security slice; release still held
+
+| ID | Acceptance criterion | Evidence |
+| --- | --- | --- |
+| LL-H01 | Explicit Google production mode; empty credentials/invitations or unsafe storage fail closed; local mode retains loopback behavior | Config/admission and real pre-start command tests |
+| LL-H02 | Expiring browser-bound state, PKCE/nonce, signed token validation, single-use callback; deny uninvited accounts | Signed fixture HTTP/crypto tests |
+| LL-H03 | Immutable subject maps to existing library without reseeding; prevent reassignment/cross-owner requests | Real scheduled-history equality, persistence, revocation, action/export/restore tests |
+| LL-H04 | Hosted profiles/session picker unavailable; separate Secure/HttpOnly hashed sessions, exact origin/proxy checks, logout and limits | Endpoint/cookie/CSRF/proxy/rate/expiry tests |
+| LL-H05 | Verify owner before online cache access; offline consent+expiry+remembered-denial gate; clear device on explicit sign-out | Helper tests and fictional-identity browser walkthrough; final persistence/generation guards need later client smoke |
+| LL-H06 | Snapshot before auth tables; failure preserves content; exports omit credentials/identity/session tables | SQLite/backup and migration-admission tests |
+
+38 total tests on Windows and local Ubuntu; software behavior verified, not live Google or production readiness. LL-N02 implementation exists locally; real provider credentials, branding/consent, HTTPS, account/device acceptance and final deploy approval remain open. DNS LL-N01 step was completed by Sam. No host/provider/invitation/job changes executed.
+
+
 ## Completed 0.3 research and usability revision
 
 | ID | Acceptance criterion | Evidence |

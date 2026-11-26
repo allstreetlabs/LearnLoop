@@ -1,15 +1,26 @@
 import http from 'node:http';
 import { randomBytes, randomUUID, createHash } from 'node:crypto';
 import { readFileSync, writeFileSync } from 'node:fs';
-import { join, resolve } from 'node:path';
+import { join, resolve, relative, isAbsolute } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { DEFAULT_OWNER, applyAction, makeBackup, validateBackup, importContent, hash, queue, Problem } from './lib/domain.mjs';
 import { openStore } from './lib/storage.mjs';
+import { readConfig, requestContext } from './lib/config.mjs';
+import { createGoogleProvider } from './lib/google.mjs';
+import { createHostedAuth, createLimiter } from './lib/auth.mjs';
 
 const root = fileURLToPath(new URL('.', import.meta.url));
-export async function createApp({ dataDir = join(root, 'data'), now = () => new Date().toISOString() } = {}) {
+export async function createApp({ dataDir = join(root, 'data'), now = () => new Date().toISOString(), config = readConfig(), googleProvider, time = Date.now } = {}) {
+  if(config.mode==='google'){
+    const rel=relative(root,resolve(dataDir));
+    if(process.versions.node.split('.')[0]!=='24'||!isAbsolute(dataDir)||!rel||(!rel.startsWith('..')&&!isAbsolute(rel)))throw new Error('Hosted mode requires Node 24 and an absolute data directory outside the release.');
+  }
   const store=await openStore(dataDir,now);
   const {db,get,put,transaction}=store;
+  let auth;
+  try { if(config.mode==='google')auth=await createHostedAuth(store,dataDir,config,googleProvider||createGoogleProvider(config),time); }
+  catch(e){store.close();throw e;}
+  const limit=createLimiter();
   const digest = s => createHash('sha256').update(s).digest('hex');
   const views = lib => ({ library: lib, profile:store.profiles().find(p=>p.id===lib.ownerId), serverNow: now(), available: queue(lib, now()).map(i => i.id) });
   async function body(req) {
@@ -18,7 +29,7 @@ export async function createApp({ dataDir = join(root, 'data'), now = () => new 
     for await (const chunk of req) { size += chunk.length; if (size > 12 * 1024 * 1024) throw new Problem('File exceeds the 12 MB prototype limit.', 413); chunks.push(chunk); }
     try { return JSON.parse(Buffer.concat(chunks).toString()); } catch { throw new Problem('Invalid JSON. No changes were made.'); }
   }
-  const assets = { '/': ['index.html', 'text/html; charset=utf-8'], '/app.js': ['app.js', 'text/javascript'], '/learning.js':['learning.js','text/javascript'], '/screens.js':['screens.js','text/javascript'], '/style.css': ['style.css', 'text/css'], '/sw.js': ['sw.js', 'text/javascript'], '/icon.svg': ['icon.svg', 'image/svg+xml'], '/manifest.webmanifest': ['manifest.webmanifest', 'application/manifest+json'] };
+  const assets = { '/': ['index.html', 'text/html; charset=utf-8'], '/app.js': ['app.js', 'text/javascript'], '/learning.js':['learning.js','text/javascript'], '/screens.js':['screens.js','text/javascript'], '/account.js':['account.js','text/javascript'], '/style.css': ['style.css', 'text/css'], '/sw.js': ['sw.js', 'text/javascript'], '/icon.svg': ['icon.svg', 'image/svg+xml'], '/manifest.webmanifest': ['manifest.webmanifest', 'application/manifest+json'] };
   const server = http.createServer(async (req, res) => {
     const json = (code, value, headers = {}) => { res.writeHead(code, { 'Content-Type': 'application/json', ...headers }); res.end(JSON.stringify(value)); };
     res.setHeader('Cache-Control', 'no-store');
@@ -26,14 +37,26 @@ export async function createApp({ dataDir = join(root, 'data'), now = () => new 
     res.setHeader('Referrer-Policy', 'no-referrer');
     res.setHeader('Content-Security-Policy', "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' blob:; connect-src 'self'; manifest-src 'self'; worker-src 'self'; object-src 'none'; base-uri 'none'; frame-ancestors 'none'; form-action 'self'");
     try {
+      let context;
+      try { context=requestContext(req,config); } catch(e){throw new Problem(e.message,403);}
       const host = req.headers.host || '';
-      if (!/^(127\.0\.0\.1|localhost)(:\d+)?$/.test(host)) throw new Problem('Local mode accepts only a loopback host.', 403);
-      const path = new URL(req.url, `http://${host}`).pathname;
+      if(!req.url.startsWith('/')||req.url.startsWith('//')||req.url.length>8192)throw new Problem('Invalid request target.');
+      const url=new URL(req.url,context.origin),path=url.pathname;
+      if(auth){res.setHeader('Strict-Transport-Security','max-age=31536000');limit('request:'+context.client,300,time());}
       if (!['GET', 'POST'].includes(req.method)) throw new Problem('Method not allowed.', 405);
-      if (req.method === 'POST' && req.headers.origin !== `http://${host}`) throw new Problem('Request must come from this app.', 403);
+      if (req.method === 'POST' && req.headers.origin !== context.origin) throw new Problem('Request must come from this app.', 403);
+      if(req.method==='GET'&&path==='/api/auth'){
+        const s=auth?.session(req);
+        return json(200,{mode:config.mode,authenticated:!!s,...(s?{profile:store.profiles().find(p=>p.id===s.user_id),sessionExpiresAt:s.expires}:{})});
+      }
+      if(req.method==='GET'&&path==='/healthz'){db.prepare('SELECT 1').get();return json(200,{ready:true});}
+      if(auth&&req.method==='GET'&&path==='/auth/google/start'){limit('login:'+context.client,10,time());return auth.start(req,res);}
+      if(auth&&req.method==='GET'&&path==='/auth/google/callback'){limit('callback:'+context.client,20,time());return await auth.callback(req,res,url);}
+      if(auth&&req.method==='POST'&&path==='/api/logout')return auth.logout(req,res);
       if (req.method === 'GET' && assets[path]) {
         const [name, mime] = assets[path]; res.writeHead(200, { 'Content-Type': mime }); res.end(readFileSync(join(root, 'public', name))); return;
       }
+      if(auth&&['/api/profiles','/api/session'].includes(path))throw new Problem('Not found.',404);
       if(req.method==='GET'&&path==='/api/profiles')return json(200,{profiles:store.profiles(),localOnly:true});
       if (req.method === 'POST' && path === '/api/session') {
         const input=await body(req);
@@ -49,12 +72,13 @@ export async function createApp({ dataDir = join(root, 'data'), now = () => new 
         json(200, views(get(userId)), { 'Set-Cookie': `learnloop=${token}; HttpOnly; SameSite=Strict; Path=/; Max-Age=2592000` }); return;
       }
       const token = /(?:^|;\s*)learnloop=([a-f0-9]{64})(?:;|$)/.exec(req.headers.cookie || '')?.[1];
-      const session=token?db.prepare('SELECT user_id FROM sessions WHERE token=? AND expires>?').get(digest(token), Date.now()):null;
-      if (!session) throw new Problem('Open your local library to reconnect. Pending attempts are kept on this device.', 401);
+      const session=auth?auth.session(req):token?db.prepare('SELECT user_id FROM sessions WHERE token=? AND expires>?').get(digest(token), Date.now()):null;
+      if (!session) throw new Problem(auth?'Sign in to reconnect. Pending work stays on this device.':'Open your local library to reconnect. Pending attempts are kept on this device.', 401);
       const userId=session.user_id;
+      if(auth)limit('user:'+userId,180,time());
       if (req.method === 'GET' && path === '/api/state') return json(200, views(get(userId)));
       if (req.method === 'GET' && path === '/api/backup') {
-        const params=new URL(req.url,`http://${host}`).searchParams;
+        const params=url.searchParams;
         if(params.has('ownerId')&&params.get('ownerId')!==userId)throw new Problem('The local profile changed. Reopen the correct library before exporting.',401);
         return json(200, makeBackup(get(userId)),params.has('download')?{'Content-Disposition':`attachment; filename="learnloop-backup-${new Date().toISOString().slice(0,10)}.json"`}:{});
       }
@@ -99,15 +123,22 @@ export async function createApp({ dataDir = join(root, 'data'), now = () => new 
       }
       throw new Problem('Not found.', 404);
     } catch (e) {
+      if(auth&&req.url.startsWith('/auth/google/callback')&&req.headers.accept?.includes('text/html')){
+        res.writeHead(e instanceof Problem?e.status:500,{'Content-Type':'text/html; charset=utf-8'});
+        res.end('<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>LearnLoop sign-in</title><link rel="stylesheet" href="/style.css"><main class="page"><h1>Sign-in was not completed.</h1><p>Try again with your invited Google account. If access has not been set up yet, ask the owner to review your invitation.</p><a class="btn primary" href="/">Return to sign in</a></main></html>');return;
+      }
+      if(e instanceof Problem&&e.status===429)res.setHeader('Retry-After','60');
       json(e instanceof Problem ? e.status : 500, { error: e instanceof Problem ? e.message : 'Could not save. Your pending work is kept; retry or export it.' });
-      if (!(e instanceof Problem)) console.error(e);
+      if (!(e instanceof Problem)) console.error('LearnLoop request failed; no request or credential details logged.');
     }
   });
+  server.requestTimeout=15000;server.headersTimeout=10000;server.keepAliveTimeout=5000;server.maxRequestsPerSocket=1000;
   server.on('close', () => store.close());
   return { server, getLibrary: (owner=DEFAULT_OWNER)=>get(owner) };
 }
 if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
   const port = Number(process.env.LEARNLOOP_PORT || 8830);
-  const { server } = await createApp({ dataDir: process.env.LEARNLOOP_DATA_DIR || undefined });
-  server.listen(port, '127.0.0.1', () => console.log(`LearnLoop local prototype: http://127.0.0.1:${port}\nShared database: local data directory. Hosting and phone access are not configured. Ctrl+C to stop.`));
+  const config=readConfig();
+  const { server } = await createApp({ dataDir: process.env.LEARNLOOP_DATA_DIR || undefined,config });
+  server.listen(port, '127.0.0.1', () => console.log(config.mode==='google'?`LearnLoop Google mode: ${config.origin}\nInternal listener: 127.0.0.1:${port}. Live release acceptance is separate. Ctrl+C to stop.`:`LearnLoop local prototype: http://127.0.0.1:${port}\nShared database: local data directory. Hosting and phone access are not configured. Ctrl+C to stop.`));
 }

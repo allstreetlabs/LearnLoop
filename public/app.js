@@ -1,5 +1,6 @@
 import {pace,validatePace,exerciseFromForm,clozeParts,checkCloze,checkOrder,shuffledOrder} from './learning.js';
 import {practiceFields,practiceLibrary,drillScreen,preferencesScreen,dataView} from './screens.js';
+import {canOpenOffline,signInScreen,signOutScreen} from './account.js';
 const app = document.querySelector('#app');
 const esc = v => String(v ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 const uuid = () => crypto.randomUUID();
@@ -39,6 +40,14 @@ let view = 'today', selected = null, filter = 'all', search = '', practice = nul
 let sessionCount = 0, sessionStarted = null, lastRejected = null;
 let fileMode='import';
 let drill=null,paceDraft=null,paceDraftVersion=0,backupText='',importDraft='';
+let authMode='unknown',sessionExpiresAt=0,accountGeneration=0,hostedUnlocked=false;
+const accountChannel=typeof BroadcastChannel==='function'?new BroadcastChannel('learnloop-account'):null;
+function lockHosted(){
+  accountGeneration++;
+  hostedUnlocked=false;
+  connected=false;authNeeded=true;lib=null;pending=[];practice=null;drill=null;formValue=null;paceDraft=null;backupText='';importDraft='';preview=null;view='today';
+}
+if(accountChannel)accountChannel.onmessage=()=>{if(authMode==='google'){save({authDenied:true}).catch(()=>{});lockHosted();render();}};
 const date = v => v ? new Date(v).toLocaleString([], { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' }) : 'Not scheduled';
 function historyDescription(event){
   if(event.kind!=='practice')return event.kind;
@@ -73,6 +82,7 @@ function setPicker(){return `<div class="set-controls"><label for="set-picker">L
 function setsScreen(){return `<p class="eyebrow">Build your library</p><h1>One set for each curiosity.</h1><p class="muted">Keep related ideas together. Your introduction limit and progress belong to this profile across all sets.</p><div class="stack">${lib.sets.map(s=>`<button class="item-row" data-set="${esc(s.id)}"><strong>${esc(s.title)}</strong><span class="small muted">${lib.items.filter(i=>i.setId===s.id).length} items · ${esc(s.description||'Personal learning set')}</span></button>`).join('')}</div><form id="set-form" class="card section"><h2>Create a learning set</h2><label for="set-title">Set title</label><input id="set-title" name="title" maxlength="200" placeholder="What my agents are building" required><label for="set-description">What do you want to understand?</label><textarea id="set-description" name="description" maxlength="1000"></textarea><button class="btn primary section" type="submit" ${connected?'':'disabled'}>Create learning set</button></form>`;}
 function profilesScreen(){return `<p class="eyebrow">On this computer</p><h1>Local learning profiles.</h1><div class="callout">These profiles test separate progress locally. They are not Google sign-in or secure shared-device accounts. Another tab changing profiles pauses this tab until you reopen yours.</div><div class="stack section">${profiles.map(p=>`<button class="item-row" data-profile="${esc(p.id)}"><strong>${esc(p.name)}${p.id===ownerId?' · current':''}</strong><span class="small muted">Private library and progress for this local profile</span></button>`).join('')}</div><form id="profile-form" class="card section"><h2>Try a separate local profile</h2><label for="profile-name">Name</label><input id="profile-name" name="name" maxlength="80" required><p class="small muted section">Starts with its own copy of the 24 starter items. It shares no notes, grades or return times with the current profile.</p><button class="btn primary section" type="submit">Create local profile</button></form>`;}
 async function activateProfile(input){
+  if(authMode==='google')throw new Error('Use Google sign-in for this library.');
   pending=await read('pending')||[];
   if(pending.length)throw new Error('Sync pending work in this profile before switching. Your drafts and attempts are kept.');
   const result=await request('/api/session',input);
@@ -92,20 +102,24 @@ function status(i) {
 }
 function notify(message) { const n = document.querySelector('#notice'); n.textContent = message; n.classList.add('visible'); clearTimeout(notify.timer); notify.timer = setTimeout(() => n.classList.remove('visible'), 6000); }
 async function request(path, data) {
+  const generation=accountGeneration;
   const r = await fetch(path, { method: data === undefined ? 'GET' : 'POST', credentials: 'same-origin', cache: 'no-store', ...(data !== undefined ? { headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) } : {}), signal: AbortSignal.timeout(12000) });
   const result = await r.json();
-  if (r.status === 401) authNeeded = true;
+  if(authMode==='google'&&generation!==accountGeneration)throw Object.assign(new Error('The account changed. Sign in again.'),{status:401,accountLocked:true});
+  if (r.status === 401) {authNeeded = true;if(authMode==='google'){await save({authDenied:true}).catch(()=>{});lockHosted();}}
   if (!r.ok && !result.conflict && !result.settingsConflict) { const e = new Error(result.error || 'Could not save.'); e.status = r.status; throw e; }
   return result;
 }
 async function accept(result) {
   if (!result.library) return;
-  if(result.library.ownerId!==ownerId){authNeeded=true;connected=false;throw new Error('Another tab changed the local profile. Open your local library again; this profile’s drafts and pending work are kept.');}
+  if(result.library.ownerId!==ownerId){authNeeded=true;connected=false;if(authMode==='google')lockHosted();throw new Error('Another tab changed the account. Sign in again; the previous account’s pending work is kept separately.');}
   lib = result.library; connected = true; authNeeded = false;
   profile=result.profile||profile;ensureSets();
   await save({ library: lib, profile });
 }
 async function refresh(renderAfter = true) {
+  if(authMode==='google'&&!hostedUnlocked)return;
+  if(authMode==='google'&&lib&&sessionExpiresAt<=now()){lockHosted();render();return;}
   if (syncing||busy) return;
   try { await accept(await request('/api/state')); await sync(); }
   catch(e) { connected = false; if (e.status !== 401 && !lib) error = 'The local server is unavailable. Start LearnLoop and try again.'; }
@@ -140,6 +154,7 @@ async function sync() {
 }
 async function act(type, data = {}, item = null, version = item?.version, epoch = lib?.epoch) {
   if (!lib) throw new Error('Open the library first.');
+  if(authMode==='google'&&sessionExpiresAt<=now()){lockHosted();throw new Error('Sign in again to continue. Pending work is kept.');}
   const action = { id: uuid(), epoch, ownerId, device, type, ...data, ...(item ? { itemId: item.id, version, contentRevision:current(item).revision } : {}) };
   if (!connected && !['recall','draft','practice'].includes(type)) throw new Error('This step needs the shared library. Reconnect to continue.');
   // Persist before showing success. Raw attempted prose is never part of an action.
@@ -153,8 +168,8 @@ async function act(type, data = {}, item = null, version = item?.version, epoch 
 }
 function shell(content, title = '') {
   const count = pending.length;
-  const syncLabel = count ? `${count} pending` : connected ? 'Shared library saved' : 'Offline copy';
-  return `<div class="shell"><aside class="rail"><a class="brand" href="#today" data-nav="today"><img src="/icon.svg" alt="">LearnLoop</a><nav class="nav" aria-label="Main">${[['today','Today'],['library','Library'],['lab','Practice'],['add','Add'],['data','Data']].map(([id,label]) => `<button data-nav="${id}" ${view === id ? 'aria-current="page"' : ''}>${label}</button>`).join('')}</nav><div class="rail-foot small muted"><p>Learn it. Recall it.<br>Return when it matters.</p><p>Personal prototype · local mode</p></div></aside><div class="workspace"><header class="topbar"><span class="muted local-label">Your personal learning space</span><button class="sync ${count || !connected ? 'pending' : ''}" data-nav="data"><span class="dot"></span>${esc(syncLabel)}</button></header><main class="page ${view === 'practice' ? 'narrow' : ''}" id="main" tabindex="-1">${error ? `<div class="error-box" role="alert">${esc(error)} <button class="plain" data-do="clear-error">Dismiss</button></div>` : ''}${authNeeded ? `<div class="callout">${lib ? 'Reconnect to share progress. Pending work is kept.' : 'This prototype uses one private library on this computer.'} <button class="plain" data-do="open">Open local library</button></div>` : ''}${content}</main></div></div>`;
+  const syncLabel = authMode==='google'&&!lib?'Sign in':count ? `${count} pending` : connected ? 'Shared library saved' : 'Offline copy';
+  return `<div class="shell"><aside class="rail"><a class="brand" href="#today" data-nav="today"><img src="/icon.svg" alt="">LearnLoop</a><nav class="nav" aria-label="Main">${[['today','Today'],['library','Library'],['lab','Practice'],['add','Add'],['data','Data']].map(([id,label]) => `<button data-nav="${id}" ${view === id ? 'aria-current="page"' : ''}>${label}</button>`).join('')}</nav><div class="rail-foot small muted"><p>Learn it. Recall it.<br>Return when it matters.</p><p>${authMode==='google'?'Private learning account':'Personal prototype · local mode'}</p></div></aside><div class="workspace"><header class="topbar"><span class="muted local-label">Your personal learning space</span><button class="sync ${count || !connected ? 'pending' : ''}" data-nav="data"><span class="dot"></span>${esc(syncLabel)}</button></header><main class="page ${view === 'practice' ? 'narrow' : ''}" id="main" tabindex="-1">${error ? `<div class="error-box" role="alert">${esc(error)} <button class="plain" data-do="clear-error">Dismiss</button></div>` : ''}${authNeeded && authMode!=='google' ? `<div class="callout">${lib ? 'Reconnect to share progress. Pending work is kept.' : 'This prototype uses one private library on this computer.'} <button class="plain" data-do="open">Open local library</button></div>` : ''}${content}</main></div></div>`;
 }
 function flow(stage) { return `<div class="flow" aria-label="Learning progression">${[['review','Review'],['choice','Check'],['repeat','Repeat'],['recall','Recall']].map(([k,v])=>`<span ${stage===k?'class="active" aria-current="step"':''}>${v}</span>`).join('')}</div>`; }
 function sources(c) {
@@ -217,11 +232,13 @@ function editor() {
   return `<p class="eyebrow">${editing?'Keep the source clear':'Bring something you’re learning'}</p><h1>${editing?'Correct this item.':'Capture one useful idea.'}</h1><p class="muted">Paste a note or passage, add a source link, then write one prompt in your own words. Links are saved as references; pages and PDFs aren’t fetched.</p><form id="item-form" class="card"><label for="sourceTitle">Source or note title</label><input id="sourceTitle" name="sourceTitle" maxlength="300" value="${esc(c.sourceTitle)}" required><label for="url">Source link <span class="muted small">optional</span></label><input id="url" name="url" type="url" placeholder="https://…" value="${esc(c.url)}"><label for="excerpt">Your note or pasted passage</label><textarea id="excerpt" name="excerpt" maxlength="20000">${esc(c.excerpt)}</textarea>${!editing?'<button type="button" class="plain" data-do="capture">Save note for later</button>':''}<hr><label for="item-set">Learning set</label><select id="item-set" name="setId">${lib.sets.map(s=>`<option value="${esc(s.id)}" ${s.id===(c.setId||activeSetId||lib.sets[0].id)?'selected':''}>${esc(s.title)}</option>`).join('')}</select><label for="prompt">Recall prompt</label><textarea id="prompt" name="prompt" maxlength="1500" placeholder="What would you want to recall without looking?" required>${esc(c.prompt)}</textarea><label for="answer">Reference answer</label><textarea id="answer" name="answer" maxlength="6000" required>${esc(c.answer)}</textarea><label for="points">Required ideas <span class="small muted">one per line, 1–3</span></label><textarea id="points" name="points" required>${esc((c.required_points||[]).join('\n'))}</textarea><label for="explanation">Why it matters <span class="muted small">optional</span></label><textarea id="explanation" name="explanation" maxlength="6000">${esc(c.explanation)}</textarea><label for="locator">Page, section or passage</label><input id="locator" name="locator" maxlength="500" value="${esc(c.locator)}">${practiceFields(c)}<label for="changeReason">${editing?'What did you correct?':'Review note'}</label><input id="changeReason" name="changeReason" maxlength="1000" value="${esc(c.changeReason || (editing?'':'Personal note, ready for my review'))}" required><p class="small muted section">${editing?'A new immutable revision will be saved. Learning restarts from Review; old attempts keep their original answers and sources.':'New personal notes start with Review and then free recall. Multiple-choice checks are currently authored only for the 24-item starter set.'}</p><div class="actions"><button class="btn primary" type="submit" ${connected?'':'disabled'}>${editing?'Save correction & restart learning':'Save recall item'}</button><button class="btn" type="button" data-nav="library">Cancel</button></div>${!connected?'<p class="small error section">Reconnect to add an item. You can still capture a note for later.</p>':''}</form>`;
 }
 function dataScreen() {
-  return dataView({lib,profile,pending,connected,preview,fileMode,storagePersistent,backupText,importDraft});
+  return dataView({lib,profile,pending,connected,preview,fileMode,storagePersistent,backupText,importDraft,authMode});
 }
 function render(focus=false) {
   let content;
-  if(!lib) content=`<div class="card hero"><p class="eyebrow">A little, remembered well</p><h1>Welcome to LearnLoop.</h1><p>Review an idea, check your understanding, then recall it in your own words.</p><button class="btn primary" data-do="open">Open local library →</button><p class="small muted section">24 source-linked starting items about how data center projects work. One personal library, saved on this computer.</p></div>`;
+  if(authMode==='google'&&!lib)content=signInScreen();
+  else if(authMode==='google'&&view==='signout')content=signOutScreen(pending);
+  else if(!lib) content=`<div class="card hero"><p class="eyebrow">A little, remembered well</p><h1>Welcome to LearnLoop.</h1><p>Review an idea, check your understanding, then recall it in your own words.</p><button class="btn primary" data-do="open">Open local library →</button><p class="small muted section">24 source-linked starting items about how data center projects work. One personal library, saved on this computer.</p></div>`;
   else content = view==='practice'&&practice?practiceScreen():view==='lab'?`${setPicker()}${practiceLibrary({lib,items:lib.items.filter(i=>inSet(i)&&current(i).practice),pending,connected})}`:view==='drill'&&drill?drillScreen(drill,sources):view==='preferences'?preferencesScreen(lib.settings,paceDraft):view==='sets'?setsScreen():view==='profiles'?profilesScreen():view==='library'?library():view==='detail'?detail():view==='add'||view==='edit'?editor():view==='data'?dataScreen():view==='summary'?endScreen():today();
   app.innerHTML=shell(content);
   if(busy) app.querySelectorAll('button').forEach(b=>b.disabled=true);
@@ -279,6 +296,9 @@ app.addEventListener('click',async event=>{
     if(b.dataset.rating){const p=practice,c=current(p.item);busy=true;await act('recall',{rating:b.dataset.rating,method:p.method,missed:c.required_points.map((_,n)=>n).filter(n=>!p.points.has(n))},p.item,p.version,p.epoch);await save({[`attempt:${p.item.id}`]:null});sessionCount++;practice=null;await next(p.item.id);return;}
     if(b.dataset.resolve){busy=true;await act('resolve',{conflictId:b.dataset.resolve,resolution:b.dataset.resolution},lib.items.find(i=>i.id===selected));render();return;}
     switch(b.dataset.do){
+      case 'google-login':await rawSave({nextOfflineConsent:!!document.querySelector('#offline-consent')?.checked});window.location.assign('/auth/google/start');break;
+      case 'signout':await keepAttempt();pending=await read('pending')||[];view='signout';render(true);break;
+      case 'confirm-signout':pending=await read('pending')||[];if(pending.length)throw new Error('Sync pending work before clearing this device.');busy=true;await request('/api/logout',{});accountChannel?.postMessage('signed-out');lockHosted();await new Promise((resolve,reject)=>{const t=db.transaction('kv','readwrite');t.objectStore('kv').clear();t.oncomplete=resolve;t.onerror=()=>reject(t.error);}).catch(()=>{});window.location.replace('/');break;
       case 'open': busy=true;await activateProfile({profileId:ownerId});break;
       case 'sets':view='sets';render(true);break;
       case 'profiles':profiles=(await request('/api/profiles')).profiles;view='profiles';render(true);break;
@@ -368,11 +388,28 @@ window.addEventListener('focus',()=>refresh(!practice));
 document.addEventListener('visibilitychange',()=>{if(!document.hidden)refresh(!practice);});
 setInterval(()=>{if(!document.hidden&&!busy)refresh(!practice);},15000);
 try{
-  await migrateDeviceCache();ownerId=await rawRead('activeOwner')||'local-owner';
+  await migrateDeviceCache();let info=null;
+  try{info=await request('/api/auth');}catch{}
+  authMode=info?.mode||await rawRead('authMode')||(['127.0.0.1','localhost'].includes(location.hostname)?'local':'google');
+  await rawSave({authMode});
+  const savedOwner=await rawRead('activeOwner');ownerId=info?.authenticated?info.profile.id:savedOwner||'local-owner';
+  sessionExpiresAt=info?.sessionExpiresAt||await read('sessionExpiresAt')||0;
+  if(authMode==='google'){
+    if(info?.authenticated){
+      await rawSave({activeOwner:ownerId});await save({sessionExpiresAt,authDenied:false});
+      const consent=await rawRead('nextOfflineConsent');if(consent!==undefined&&consent!==null){await save({offlineConsent:consent===true});await rawSave({nextOfflineConsent:null});}
+    }else if(info||!canOpenOffline({mode:authMode,consent:await read('offlineConsent'),owner:savedOwner,expires:sessionExpiresAt,authenticatedFailure:await read('authDenied')===true})){
+      if(info)await save({authDenied:true});
+      lockHosted();render();
+      if('serviceWorker' in navigator)navigator.serviceWorker.register('/sw.js').catch(()=>{});
+      throw Object.assign(new Error('Sign in required.'),{accountLocked:true});
+    }
+    hostedUnlocked=true;
+  }
   [lib,pending,device]=await Promise.all([read('library'),read('pending'),read('device')]);pending=pending||[];device=device||uuid();await save({device});
   profile=await read('profile')||{id:ownerId,name:ownerId==='local-owner'?'My personal library':'Saved local profile'};
   activeSetId=await read('selectedSet')||'';ensureSets();
   storagePersistent=await navigator.storage?.persisted?.()||false;
   render();await refresh(true);
   if('serviceWorker' in navigator)navigator.serviceWorker.register('/sw.js').catch(()=>notify('Offline shell unavailable. Online learning still works.'));
-}catch(e){error='Device storage could not open. Allow browser site storage to save learning safely.';render();}
+}catch(e){if(!e.accountLocked)error='Device storage could not open. Allow browser site storage to save learning safely.';render();}

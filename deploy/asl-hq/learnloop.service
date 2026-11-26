@@ -1,5 +1,5 @@
-# DRAFT ONLY. Do not install with the current local-only 0.3 release.
-# Requires a reviewed hosted-enabled release and explicit deployment approval.
+# REVIEW TEMPLATE for hosted 0.4; not installed or accepted on ASL HQ.
+# Requires reviewed provider/recovery configuration and explicit deployment approval.
 [Unit]
 Description=LearnLoop private personal learning pilot
 After=network-online.target

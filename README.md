@@ -1,12 +1,23 @@
 # LearnLoop
 
+## 0.4 hosted preparation
+
+Google sign-in and hosted security are implemented and tested locally; provider setup and ASL HQ deployment remain held. Default node server.mjs still opens the existing loopback local library. Hosted mode requires a reviewed Node 24 release, absolute data outside the release, canonical HTTPS origin, private Google client credentials and a nonempty LEARNLOOP_GOOGLE_ACCOUNTS JSON allowlist. Empty or unsafe configuration fails startup. Local profile/session selection is disabled in Google mode.
+
+Google callback: https://learn.allstreetlabs.com/auth/google/callback. Each private invitation specifies one sub OR authoritative Google email plus an existing ownerId. Initial email enrollment works for Gmail/verified Workspace; an external Google email account needs a subject pin. Successful enrollment binds the stable subject to the existing library without resetting it. Real account/client values stay out of Git.
+
+Hosted cache opens online only after authentication. Personal-device offline access is opt-in and session/denial-bound. Sign-out explicitly removes browser cache/drafts after pending work is synced and revokes that browser session. Private browser storage is not encryption. Learning JSON backups omit identities/sessions; private SQLite recovery must revoke restored sessions and unfinished login flows.
+
+38 tests pass on Windows and local Ubuntu, including the real service pre-start guard; browser tests use only a fictional signed-identity fixture. No actual Google login, live TLS, installed HQ service, phone test or off-machine recovery is claimed. See docs/verification.md, ADR 006 and the deployment plan for exact remaining gates. The older local walkthrough below remains valid; its local-profile cautions apply to default local mode.
+
+
 A quiet personal learning app: review an idea, check understanding, revisit it after a gap, then recall it in your own words. The first set contains 24 source-linked items about how data center projects work.
 
-**Local prototype, 0.3.0.** Canonical repository: https://github.com/allstreetlabs/LearnLoop, working branch `build/local-prototype`. Sam authorized local building/testing/refinement and regular source/status GitHub backups on November 25. Source/documents are backed up on that branch; hosting, deployment and infrastructure remain separately approved steps. Read STATUS.md for active state and exact verification limits.
+**Version 0.4.0: local learning plus hosted-authentication preparation.** Canonical repository: https://github.com/allstreetlabs/LearnLoop, working branch `build/local-prototype`. Sam authorized local building/testing/refinement and regular source/status GitHub backups on November 25. Source/documents are backed up on that branch; hosting, deployment and infrastructure remain separately approved steps. Read STATUS.md for active state and exact verification limits.
 
 ## Run
 
-Use Node.js **24.x**. The only runtime dependency is pinned `ts-fsrs@5.2.3`; the browser has no third-party runtime assets.
+Use Node.js **24.x**. Runtime dependencies are pinned `ts-fsrs@5.2.3` and `jose@6.2.18`; the browser has no third-party runtime assets.
 
 ```powershell
 # From this checkout; dependencies are already installed in the build workspace.

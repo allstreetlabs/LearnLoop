@@ -1,5 +1,16 @@
 # ASL HQ deployment plan — LearnLoop personal pilot
 
+## Implementation checkpoint — 0.4, November 25
+
+The hosted identity/security implementation and pre-start guard now exist locally; 38 Windows/local-Ubuntu tests pass. Draft config now uses LEARNLOOP_GOOGLE_ACCOUNTS, a JSON allowlist (one subject or authoritative email plus existing ownerId), rather than the earlier subject-list placeholder. See ADR 006 and verification. Google/provider credentials, first private account, actual callback/branding/TLS, final client smoke and off-machine recovery remain open; deployment is still not authorized.
+
+Runtime candidate is Node 24.22.3 Linux x64, with official manifest SHA256 pinned in deploy/asl-hq/runtime.json. The archive was used only in the dedicated D: local-test tree. Recheck HQ architecture and pinned identity before any install. Do not change HQ's global Node 18.
+
+The Caddy fragment now overwrites X-Forwarded-For with {remote_host} to match the app's single-IP trust contract. Before routing, verify that existing Caddy access/error logging omits/redacts OAuth callback query credentials; the app itself never logs raw requests/tokens. Actual Caddy reload/systemd/resource acceptance remains pending.
+
+First hosted startup snapshots SQLite before creating auth tables. For private full-SQLite disaster recovery, preserve auth_identities but revoke all hosted_sessions and oauth_transactions before resuming online; do not revive old sessions from a recovery snapshot. Learning JSON export includes no identity/session records.
+
+
 November 25, 2026 · deployment state: PLANNED, NOT APPROVED TO EXECUTE
 
 **DNS milestone:** Sam subsequently added the GoDaddy A record. Read-only verification against ns73.domaincontrol.com, ns74.domaincontrol.com and 1.1.1.1 returned learn.allstreetlabs.com → 162.35.191.47, TTL 3600 on November 25. DNS is complete; the earlier absent-record observations/held DNS-save steps below describe the pre-change plan. Remaining server, Google-provider, backup-job and deployment actions are still held. DNS acceptance alone does not verify HTTPS, sign-in or the application.

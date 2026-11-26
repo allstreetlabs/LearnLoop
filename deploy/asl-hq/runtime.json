@@ -1,0 +1,11 @@
+{
+  "status": "candidate_verified_locally_not_installed",
+  "version": "24.22.3",
+  "platform": "linux-x64",
+  "archive": "node-v24.22.3-linux-x64.tar.xz",
+  "url": "https://nodejs.org/dist/v24.22.3/node-v24.22.3-linux-x64.tar.xz",
+  "manifest": "https://nodejs.org/dist/v24.22.3/SHASUMS256.txt",
+  "sha256": "4f2b175a6d53a5c617a80dba2676238a0688cef28c6da4eba35c7d844e66fcfb",
+  "verification": "SHA-256 matched official HTTPS manifest; no detached-signature verification claimed",
+  "deploymentGate": "Recheck target architecture, host identity, exact source/runtime artifacts, provider/recovery readiness and explicit approval"
+}

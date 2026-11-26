@@ -1,5 +1,18 @@
 # Architecture as built
 
+## 0.4 identity and hosted boundary
+
+Default local behavior stays available. Explicit Google mode requires canonical HTTPS origin, private web client credentials and a nonempty LEARNLOOP_GOOGLE_ACCOUNTS JSON allowlist mapping invited subject/authoritative email to existing owner IDs. Production cannot default to local. Data must be absolute and outside the release; runtime must be Node 24. The pre-start guard checks these conditions, not Google network availability.
+
+Pinned jose 6.2.18 validates Google RS256 identities against fixed Google JWKS/token endpoints. State/verifier/nonce are ten-minute, browser-bound, consumed before exchange. Immutable Google issuer+sub binds each existing library once; initial email enrollment requires Gmail/verified Workspace. Hosted auth tables/sessions are separate from local profile cookies. First hosted open takes a private consistent SQLite snapshot. Library content schema 2 and learning backup 3 remain compatible; public JSON backups include no identity/session/credential data.
+
+Canonical Host, HTTPS forwarded protocol and exact mutation Origin are required from a loopback proxy only. Caddy overwrites X-Forwarded-For with the direct client address. Bounded rate limits, timeouts, HSTS, host-only Secure/HttpOnly/Lax cookies and safe errors complement existing owner/epoch/version checks. Local session/profile endpoints are unavailable remotely.
+
+The client opens online cache only after identity selection. Offline reopening is opt-in, owner/expiry-bound and prevented by a persisted authentication denial. In-flight responses from an earlier account generation are discarded. Sign-out revokes its session, clears origin cache/storage and locks tabs; pending work must sync before that explicit UI action. Cache is private browser storage, not encrypted protection against OS/browser control. Offline clients cannot observe revocation until reconnecting.
+
+Auth bindings require private SQLite disaster recovery; revoke all restored hosted sessions and OAuth transactions before release. Learning JSON restore affects only the authenticated library, preserving owner identity. Read ADR 006 and verification for exact tests/limits. No server/provider deployment has occurred.
+
+
 ## 0.3 refinement
 
 Library/SQL schema remains 2. Optional session minutes, attempt cap, introduction preference and optimistic settingsVersion extend the existing metadata; absent values keep defaults. Bounds: 0–10 new ideas/day, 3–15 minutes, 3–20 attempts, guided or recall-first. Recall-first affects future Review transitions only; sessions stop between questions. Stale settings return a conflict without an event or overwrite; the client retains a draft for explicit review/resave. These controls do not tune FSRS parameters.
