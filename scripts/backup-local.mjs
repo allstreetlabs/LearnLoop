@@ -21,8 +21,10 @@ let database = null;
 if (existsSync(join(dataDir,'learnloop.sqlite'))) {
   const source = new DatabaseSync(join(dataDir,'learnloop.sqlite'),{readOnly:true});
   try { await backup(source,join(dir,'learnloop.sqlite')); } finally { source.close(); }
-  const check = new DatabaseSync(join(dir,'learnloop.sqlite'),{readOnly:true});
+  // Normalize only the newly created copy; closed recovery files must not need WAL sidecars.
+  const check = new DatabaseSync(join(dir,'learnloop.sqlite'));
   try {
+    check.exec('PRAGMA journal_mode=DELETE;');
     const integrity = check.prepare('PRAGMA integrity_check').all();
     if (integrity.length!==1 || Object.values(integrity[0])[0]!=='ok') throw new Error('SQLite integrity check failed.');
     if (check.prepare('PRAGMA foreign_key_check').all().length) throw new Error('SQLite foreign-key check failed.');

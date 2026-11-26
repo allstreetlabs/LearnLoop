@@ -9,7 +9,7 @@
   "scripts": {
     "start": "node server.mjs",
     "test": "node --test test/*.test.mjs",
-    "check": "node --check server.mjs && node --check lib/domain.mjs && node --check lib/storage.mjs && node --check lib/config.mjs && node --check lib/google.mjs && node --check lib/auth.mjs && node --check scripts/assert-hosted-ready.mjs && node --check scripts/backup-local.mjs && node --check public/app.js && node --check public/learning.js && node --check public/screens.js && node --check public/account.js && node --check public/sw.js"
+    "check": "node --check server.mjs && node --check lib/domain.mjs && node --check lib/storage.mjs && node --check lib/config.mjs && node --check lib/google.mjs && node --check lib/auth.mjs && node --check scripts/assert-hosted-ready.mjs && node --check scripts/backup-local.mjs && node --check scripts/prepare-recovery.mjs && node --check public/app.js && node --check public/learning.js && node --check public/screens.js && node --check public/account.js && node --check public/sw.js"
   },
   "dependencies": {
     "jose": "6.2.18",

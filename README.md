@@ -76,3 +76,7 @@ Source/status continuity is checked daily by the authorized heartbeat and at mat
 The [research and revision report](docs/research/2026-11-25-learning-methods-and-app-review.md) compares official app documentation and learning-method evidence. The new modes are product experiments, not proof of improved recall. Their three examples overlap the starter material; exclude them from independent control/assessment sets.
 
 The content is a personal prototype, not an expert-reviewed qualification or site work instruction. Source scopes and dates remain visible. The original review file is preserved unchanged in `content/data-center-flow.v0.1.json`; Sam's build instruction authorizes its use here. New choice checks in `content/choices.json` are draft additions needing usability and content review separately.
+
+## November 26 local recovery tool
+
+`scripts/prepare-recovery.mjs` now provides a non-overwriting, checksum/integrity-checked recovery candidate with retained library/identity mappings and revoked sessions/unfinished OAuth flows. Read docs/operations/private-sqlite-recovery.md before using it. It does not deploy or restore over the running service. The backup helper now produces a self-contained new SQLite checkpoint; original runtime data is opened read-only.

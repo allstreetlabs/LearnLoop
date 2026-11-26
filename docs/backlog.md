@@ -1,5 +1,7 @@
 # MVP backlog and release boundaries
 
+November 26 local release preparation: LL-H07 implemented/tested. New scripts/prepare-recovery.mjs accepts a trusted normalized SQLite checkpoint into a new destination, retains learning/identity/dedupe data and clears all sessions/OAuth flows. Refuses existing paths, release placement, invalid digests, sidecars/WAL-mode or invalid schemas. Updated backup helper normalizes only its new copy. 43 Windows tests + syntax pass; actual checkpoint recovery receipt follows closeout. C: is full; active source/test work moved by separate copy to the dedicated D: checkout recorded in STATUS.md. No Google client/consent, server change, new job or deployment executed.
+
 November 26 provider update: the user-authorized dedicated Google Cloud project is created, creator Owner role verified and no billing account linked. OAuth client/consent/credentials and actual Google callback remain pending. Private metadata stays ignored; see operations/google-project-choice.md. Earlier no-provider-change statements below describe prior milestones.
 
 | ID | Status / acceptance criterion |

@@ -25,3 +25,7 @@ Back up before schema migrations and after material local data changes. Use a se
 ## Boundaries and missing owners
 
 Product repo owns implementation and its active status. AgenticHQ owns operational tasks/approvals; current linkage is unresolved, so record read/auth failures rather than inventing records. Shared-sync owns cross-agent continuity; SAMOS is navigation/provenance. This maintenance does not create an alternative operational approval system. Secrets and private learner data never belong in continuity files.
+
+## November 26 recovery preparation
+
+The local `scripts/prepare-recovery.mjs` command prepares a new verified SQLite recovery candidate, preserving content/progress/identity mappings and action dedupe while revoking local/hosted sessions and unfinished sign-ins. It never overwrites an existing destination or installs a candidate. See private-sqlite-recovery.md. Updated checkpoints normalize the new backup copy to DELETE journal mode; older WAL-mode checkpoints remain preserved and need a separately verified normalized copy before this strict recovery command accepts them. This is not an off-machine destination, retention or job approval.
