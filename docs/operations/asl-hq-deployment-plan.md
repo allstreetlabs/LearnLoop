@@ -1,5 +1,7 @@
 # ASL HQ deployment plan — LearnLoop personal pilot
 
+**November 26 project recommendation:** after Sam-authorized consultation with AgenticHQ (A) Build, prefer a dedicated LearnLoop Google Cloud project and Web OAuth client administered by an existing ASL-designated Google account. Preserve the direct-Google implementation. See google-project-choice.md for the distinction between administrator, project, client and learner accounts. This supersedes earlier generic suggestions to select/reuse an existing Google project; creation/custody/provider changes remain unapproved and unexecuted.
+
 **November 26 account update:** Sam selected two sign-in accounts for primary/secondary profile testing. Ignored data/deployment/google-accounts.json contains their private mappings to distinct existing local owners. The second owner now has an independent 24-item starter set; the primary library was hash-compared unchanged. Do not publish the account list. Google project/client configuration, consent/branding, actual sign-in and server deployment remain separate pending steps; this private preparation is not live enrollment or deployment approval.
 
 ## Implementation checkpoint — 0.4, November 25

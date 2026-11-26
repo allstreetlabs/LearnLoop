@@ -1,5 +1,9 @@
 # LearnLoop build handoff
 
+## Provider project consultation — November 26
+
+At Sam's explicit request, consulted AgenticHQ (A) Build about reusing existing sign-in setup. Recommendation: retain direct Google OIDC, use an existing ASL administrator account to own a dedicated LearnLoop Google Cloud project and a new Web OAuth client. A shared Auth0 application is an alternative only if Sam chooses ASL SSO. The builder's findings are recorded evidence, not fresh provider inspection. See operations/google-project-choice.md. No provider configuration/credential or deployment changes; private account ownership details remain outside Git.
+
 ## Two private accounts prepared — November 26
 
 Sam supplied a primary Google sign-in email and requested a second account for independent profile testing. Actual addresses and owner mappings are only in ignored data/deployment/google-accounts.json; do not copy them into Git. Primary maps to the existing local-owner library. Secondary maps to a newly created independent owner with its own 24-item starter library and no events. Existing primary library hash is unchanged; integrity/foreign keys pass. Configuration was validated through the real hosted resolver with in-process fictional credentials, without starting hosted mode or enrolling any Google identity. A pre-profile SQLite checkpoint and a separate private invitation-config backup were verified/saved under D:/Codex/LearnLoop/backups; a post-change checkpoint follows the source milestone. Load the private JSON as the eventual LEARNLOOP_GOOGLE_ACCOUNTS value, not as a filename. Google client/provider setup, callback and deployment remain unapproved/unexecuted. No new app code or test suite change; prior 38-test evidence is dated November 25.
