@@ -90,3 +90,5 @@ Subscription access and attachment to another ASL product remain possible later 
 ## Future opportunity register
 
 See `product/future-opportunities.md`: candidate Avala and Intel Hub / Talent Network training modules; optional public/shared profiles, follows and selected achievements; friend challenges, rankings and levels; later subscription features and downloadable/native phone distribution. Google sign-in is selected for the personal pilot and remains to implement/test; provider configuration is not yet created. The social, competitive, commercial and integration features remain later candidates. Keep participation XP distinct from delayed recall, and personal progress private unless the learner explicitly shares it.
+
+LL-H07 closeout: 43 Windows tests and syntax pass; actual normalized checkpoint → new D: candidate CLI rehearsal passed with original file checksum unchanged, both profile libraries preserved and all restored local sessions cleared. Hosted-session/flow revocation and scheduled history are separately verified in signed/private fixtures. Implementation cd36ff0 was normally pushed and read back; no live restore/deployment was performed.
