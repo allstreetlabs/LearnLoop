@@ -1,5 +1,9 @@
 # LearnLoop build handoff
 
+## Administrator account check — November 26
+
+Live read-only Google Cloud console confirmed the intended existing administrator account is signed in and an existing HQ-related project is visible. Exact address/project are recorded only in ignored data/deployment/google-admin-check.json, not this public repo. This verifies session/account access, not IAM Owner role or project-creation permission. No LearnLoop project, OAuth client, consent settings or deployment was created. Continue with the dedicated-project/Web-client recommendation after the relevant setup approval.
+
 ## Provider project consultation — November 26
 
 At Sam's explicit request, consulted AgenticHQ (A) Build about reusing existing sign-in setup. Recommendation: retain direct Google OIDC, use an existing ASL administrator account to own a dedicated LearnLoop Google Cloud project and a new Web OAuth client. A shared Auth0 application is an alternative only if Sam chooses ASL SSO. The builder's findings are recorded evidence, not fresh provider inspection. See operations/google-project-choice.md. No provider configuration/credential or deployment changes; private account ownership details remain outside Git.
