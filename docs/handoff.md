@@ -1,6 +1,12 @@
 # LearnLoop build handoff
 
-## Administrator account check — November 26
+## Dedicated project created; working name retained — November 26
+
+Sam explicitly authorized creating a separate Google Cloud project using the already signed-in ASL account. Created after visible-project duplicate search; live IAM verifies the administrator's Owner (Legacy) role, and Billing shows no linked account. Exact account/project identifiers and URLs are in ignored data/deployment/google-project.json; screenshot is in the parent outputs/learnloop-google-project-created.jpg. No OAuth client/secret/consent, billing, deployment or additional permission grant was created. This supersedes the earlier read-only administrator-check limitation below. Next provider step is the dedicated Web client and consent configuration, followed by real callback/device acceptance; server/recovery deployment remains a separate approval.
+
+Sam also directed that LearnLoop stay a provisional code/project name because existing learning products use it. Focused live research confirmed overlap. See product/naming.md and LL-NAME-01 in backlog. Keep the selected neutral learn.allstreetlabs.com address; no new name/domain or migration was selected. Future branding changes must preserve learning IDs, progress and backup compatibility. No product code/data changed in this milestone; prior test evidence is unchanged.
+
+## Historical administrator account check — November 26
 
 Live read-only Google Cloud console confirmed the intended existing administrator account is signed in and an existing HQ-related project is visible. Exact address/project are recorded only in ignored data/deployment/google-admin-check.json, not this public repo. This verifies session/account access, not IAM Owner role or project-creation permission. No LearnLoop project, OAuth client, consent settings or deployment was created. Continue with the dedicated-project/Web-client recommendation after the relevant setup approval.
 

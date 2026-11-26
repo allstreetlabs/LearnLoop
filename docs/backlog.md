@@ -1,5 +1,11 @@
 # MVP backlog and release boundaries
 
+November 26 provider update: the user-authorized dedicated Google Cloud project is created, creator Owner role verified and no billing account linked. OAuth client/consent/credentials and actual Google callback remain pending. Private metadata stays ignored; see operations/google-project-choice.md. Earlier no-provider-change statements below describe prior milestones.
+
+| ID | Status / acceptance criterion |
+| --- | --- |
+| LL-NAME-01 | Later, before wider promotion/subscription/app-store release: choose a distinctive public name after exact/similar web, app-store, domain/handle and relevant trademark checks; record Sam's selection and preserve IDs/progress/export compatibility. LearnLoop remains the working name. Evidence and limits: product/naming.md. This does not block the personal prototype. |
+
 November 26 account-preparation update: two user-selected Google invitations are validated in ignored private configuration. The primary existing library is preserved and the second has an independent local starter library/progress. Account selection is complete for initial testing; Google web-client setup, live enrollment, actual-device verification and server release approval remain open. Real addresses/owner mappings never enter this public backlog.
 
 ## Completed local 0.4 identity/security slice; release still held

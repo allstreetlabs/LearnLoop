@@ -4,6 +4,10 @@ Updated November 26, 2026 · owner Sam · local build lane
 
 ## Current milestone
 
+**November 26 provider milestone:** Sam explicitly authorized a separate Google Cloud project using the signed-in ASL account. The dedicated project was created after checking for an existing visible LearnLoop project; IAM confirms the intended administrator's Owner (Legacy) role and Billing confirms no linked billing account. Private identifiers/evidence are in ignored data/deployment/google-project.json. OAuth client/credentials and consent setup remain pending; no billing, host deployment or new job was configured. This narrowly supersedes earlier statements that no project creation was authorized/executed.
+
+**Working name:** Sam accepts LearnLoop as a code/project name and may choose a more distinctive public brand. Live checks found overlapping learning products; see docs/product/naming.md. Naming review precedes wider promotion, not the personal prototype. No repo/domain/data rename was made.
+
 **0.4.0 Google identity and hosted-security implementation built/tested locally.** Includes one-time state/PKCE/nonce, signed identity validation, private invitation→existing-library mapping, separate hosted sessions, owner isolation, hosted profile-picker removal, canonical HTTPS proxy/origin checks, rate limits, health/readiness and sign-out/device-cache controls. Default PC launch stays local. Original24 items, sources, learning history and schema 2 are preserved; auth tables are created only in hosted mode after a private snapshot.
 
 **38 tests pass on Windows and local Ubuntu/Node 24.22.3**, plus syntax checks. Dependency audit reports no known vulnerabilities at this check. Browser uses a fictional signed-identity fixture: login, review, opted-in offline reopen/note sync, other-tab sign-out, retained progress and opt-out offline lock observed. Final persisted-denial/in-flight guards were source/syntax/helper checked after walkthrough; later client smoke remains. This is not a live Google/TLS/HQ acceptance or independent security audit.
@@ -29,4 +33,4 @@ Next: private Google client setup, late client/actual-device smoke, exact off-ma
 
 Start with README, AGENTS, docs/handoff.md, docs/backlog.md, ADR 006, docs/verification.md and docs/operations/asl-hq-deployment-plan.md. Private runtime data stays ignored under data/; QA stays in isolated D:/Codex/LearnLoop/tests or local Ubuntu /tmp. Normal launch: node server.mjs at 127.0.0.1:8830. All owned previews stopped.
 
-Authorization: local building/testing/refinement, dedicated D: use, normal source/doc backups and existing continuity maintenance. DNS was added by Sam. No other infrastructure, provider configuration, deployment, spend, invitations or autonomous jobs were authorized/executed.
+Authorization: local building/testing/refinement, dedicated D: use, normal source/doc backups and existing continuity maintenance; Sam subsequently explicitly authorized the dedicated Google project creation recorded above. DNS was added by Sam. OAuth client/credential/consent setup, host deployment, spend, invitations and new autonomous jobs remain separate pending steps.
