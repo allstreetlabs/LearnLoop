@@ -1,5 +1,9 @@
 # LearnLoop build handoff
 
+## Two private accounts prepared — November 26
+
+Sam supplied a primary Google sign-in email and requested a second account for independent profile testing. Actual addresses and owner mappings are only in ignored data/deployment/google-accounts.json; do not copy them into Git. Primary maps to the existing local-owner library. Secondary maps to a newly created independent owner with its own 24-item starter library and no events. Existing primary library hash is unchanged; integrity/foreign keys pass. Configuration was validated through the real hosted resolver with in-process fictional credentials, without starting hosted mode or enrolling any Google identity. A pre-profile SQLite checkpoint and a separate private invitation-config backup were verified/saved under D:/Codex/LearnLoop/backups; a post-change checkpoint follows the source milestone. Load the private JSON as the eventual LEARNLOOP_GOOGLE_ACCOUNTS value, not as a filename. Google client/provider setup, callback and deployment remain unapproved/unexecuted. No new app code or test suite change; prior 38-test evidence is dated November 25.
+
 ## Current 0.4 build — Google identity and hosted security
 
 Local implementation/testing authorized by Sam's “ok lets go”; provider/server deployment hold remains. New lib/config.mjs, google.mjs and auth.mjs implement explicit hosted mode, signed Google OIDC identity, one-time browser-bound state/PKCE/nonce, immutable issuer+subject ownership, private invitation→existing-library mapping, separate hashed sessions, logout, canonical loopback proxy/origin checks and bounded rate limits. No public profile/session creation in hosted mode. Normal PC launch remains local.

@@ -1,5 +1,7 @@
 # ASL HQ deployment plan — LearnLoop personal pilot
 
+**November 26 account update:** Sam selected two sign-in accounts for primary/secondary profile testing. Ignored data/deployment/google-accounts.json contains their private mappings to distinct existing local owners. The second owner now has an independent 24-item starter set; the primary library was hash-compared unchanged. Do not publish the account list. Google project/client configuration, consent/branding, actual sign-in and server deployment remain separate pending steps; this private preparation is not live enrollment or deployment approval.
+
 ## Implementation checkpoint — 0.4, November 25
 
 The hosted identity/security implementation and pre-start guard now exist locally; 38 Windows/local-Ubuntu tests pass. Draft config now uses LEARNLOOP_GOOGLE_ACCOUNTS, a JSON allowlist (one subject or authoritative email plus existing ownerId), rather than the earlier subject-list placeholder. See ADR 006 and verification. Google/provider credentials, first private account, actual callback/branding/TLS, final client smoke and off-machine recovery remain open; deployment is still not authorized.

@@ -1,6 +1,6 @@
 # LearnLoop active state
 
-Updated November 25, 2026 · owner Sam · local build lane
+Updated November 26, 2026 · owner Sam · local build lane
 
 ## Current milestone
 
@@ -13,7 +13,7 @@ Updated November 25, 2026 · owner Sam · local build lane
 | Area | State / next gate |
 | --- | --- |
 | Personal learning / formats / pace / JSON recovery | Implemented through 0.3, preserved and regressed in 0.4 |
-| Hosted Google identity / private ownership | Built/tested locally; private Google client + first account/consent/branding and live callback still needed |
+| Hosted Google identity / private ownership | Built/tested locally; two user-selected account mappings prepared in ignored private configuration. Primary library preserved; second independent local profile created. Google client/consent/branding, live callback and deployment remain pending |
 | Device privacy / offline | Opt-in personal-device reopening, expiry/denial gate, explicit clear-device logout; actual HTTPS/Android and final-guard client smoke open |
 | ASL hostname / host choice | learn.allstreetlabs.com + ASL HQ selected; user-added A→162.35.191.47 TTL3600 independently verified |
 | Runtime / deployment | Node 24.22.3 Linux x64 archive checked against official SHA256 manifest and used only locally; HQ still unmodified |
@@ -23,7 +23,9 @@ Updated November 25, 2026 · owner Sam · local build lane
 | AgenticHQ | Exact item still not_found after auth retry (5ae073e0-52de-4cbf-a664-ef9e83fa5158); no duplicate |
 | Friends / social / subscriptions / Avala / Intel / native app | Later candidates, no invitation/integration or commercial work |
 
-Next: private Google client/account setup, late client/actual-device smoke, exact off-machine recovery and concrete deployment review. Source/runtime artifact, provider/server/backup changes and acceptance/rollback must be reviewable before final approval. Do not expose local mode or the test fixture on HQ.
+November 26: private account mappings are at data/deployment/google-accounts.json (ignored, never commit). The first maps to the existing primary library; the second maps to a separate local profile with its own 24-item starter set and zero events. Primary content/history hash remained unchanged; SQLite integrity/foreign keys pass. Private mapping backup was saved under the dedicated D: backup tree. No live Google enrollment or server changes.
+
+Next: private Google client setup, late client/actual-device smoke, exact off-machine recovery and concrete deployment review. Source/runtime artifact, provider/server/backup changes and acceptance/rollback must be reviewable before final approval. Do not expose local mode or the test fixture on HQ.
 
 Start with README, AGENTS, docs/handoff.md, docs/backlog.md, ADR 006, docs/verification.md and docs/operations/asl-hq-deployment-plan.md. Private runtime data stays ignored under data/; QA stays in isolated D:/Codex/LearnLoop/tests or local Ubuntu /tmp. Normal launch: node server.mjs at 127.0.0.1:8830. All owned previews stopped.
 

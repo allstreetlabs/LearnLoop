@@ -1,5 +1,7 @@
 # MVP backlog and release boundaries
 
+November 26 account-preparation update: two user-selected Google invitations are validated in ignored private configuration. The primary existing library is preserved and the second has an independent local starter library/progress. Account selection is complete for initial testing; Google web-client setup, live enrollment, actual-device verification and server release approval remain open. Real addresses/owner mappings never enter this public backlog.
+
 ## Completed local 0.4 identity/security slice; release still held
 
 | ID | Acceptance criterion | Evidence |
