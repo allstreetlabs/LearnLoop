@@ -1,5 +1,11 @@
 # LearnLoop active state
 
+## Continuity maintenance — November 26, 11 p.m. Central
+
+The daily maintenance check fetched origin and found the clean C: mirror two commits behind the already reviewed/pushed D: recovery milestone. Refreshed this same working branch by fast-forward only to d59a868; no branch merge, app execution or private-data migration. The ignored primary SQLite file's SHA256 was unchanged across the refresh. D:/Codex/LearnLoop/work/release-prep-20261126T180131025Z remains the active engineering checkout; this C: location is now a synchronized source mirror, rather than the older 7a8a9ec checkout described in the historical closeout.
+
+C: now reports about 6.1 GB free, superseding the prior zero-space observation. This maintenance run did not open Chrome or verify Google setup; browser, provider and actual-device acceptance remain pending. No tests were rerun for this source-mirror/documentation-only maintenance, and no new runtime backup was needed because no learner data changed. Existing private checkpoint and 43-test evidence remain dated above. The daily automation's path guidance was aligned with the active D: checkout; its continuity-only scope and schedule remain unchanged.
+
 ## Local recovery and workstation blocker — November 26
 
 Sam authorized continuing the next useful local build/test/preparation steps on D:. C: was observed with zero free bytes; Chrome reported FILE_ERROR_NO_SPACE and browser control could not continue the Google setup. Default terminal sandbox launch also failed, but read-only/authorized D: commands work through the escalated terminal path. No unrelated files were deleted or moved. Google OAuth client/consent creation and live deployment were not performed.
