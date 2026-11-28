@@ -1,5 +1,15 @@
 # Google account, project and client choice
 
+## Current saved setup — November 27
+
+User explicitly approved the policy and dedicated Web client. Policy accepted and OAuth configuration created as LearnLoop (ASL pilot). LearnLoop Web is enabled with one redirect https://learn.allstreetlabs.com/auth/google/callback, no JavaScript origins and no AI-agent flag. Audience is External/Testing with exactly the two selected test accounts. Data Access declares only openid and https://www.googleapis.com/auth/userinfo.email; sensitive/restricted lists are empty. App requests openid/email. No public publishing or billing action.
+
+The private client credential is DPAPI CurrentUser encrypted under D:/Codex/LearnLoop/private/deployment, with verified readback and a hash-checked local encrypted checkpoint. Temporary plaintext was removed. Never copy account identifiers, credential values or screenshots to Git. Decryption requires the originating Windows user profile; reviewed Linux credential transfer and off-machine recovery remain release tasks. Actual client/invitation configuration validated locally without app startup or Google requests. No real Google login/callback or deployment is claimed.
+
+The recommendation below is now implemented at provider-registration level. All earlier pending-policy/no-client descriptions are historical; deployment/publication still need their separate approvals.
+
+## Historical preparation and recommendation
+
 November 27 live setup: app name LearnLoop (ASL pilot), administrator support/developer contact and External/testing audience prepared in the console. Finish requires the Google API Services User Data Policy agreement. The checkbox remains unchecked and Create unsubmitted pending specific policy/Web-client approval. No OAuth client or secret exists from this work. Planned Web client remains server-only with https://learn.allstreetlabs.com/auth/google/callback and openid/email. This is preparation, not deployed login.
 
 November 26, 2026 · dedicated project created; OAuth registration pending

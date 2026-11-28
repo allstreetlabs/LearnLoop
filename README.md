@@ -2,7 +2,7 @@
 
 ## 0.4 hosted preparation
 
-Google sign-in and hosted security are implemented and tested locally; provider setup and ASL HQ deployment remain held. Default node server.mjs still opens the existing loopback local library. Hosted mode requires a reviewed Node 24 release, absolute data outside the release, canonical HTTPS origin, private Google client credentials and a nonempty LEARNLOOP_GOOGLE_ACCOUNTS JSON allowlist. Empty or unsafe configuration fails startup. Local profile/session selection is disabled in Google mode.
+Google sign-in and hosted security are implemented and tested locally. The approved Google pilot registration is saved (dedicated Web client, two test accounts, openid/email); ASL HQ deployment and real callback/device acceptance remain pending. Credentials are protected privately on D:, never in source. Default node server.mjs still opens the existing loopback local library. Hosted mode requires a reviewed Node 24 release, absolute data outside the release, canonical HTTPS origin, private Google client credentials and a nonempty LEARNLOOP_GOOGLE_ACCOUNTS JSON allowlist. Empty or unsafe configuration fails startup. Local profile/session selection is disabled in Google mode.
 
 Google callback: https://learn.allstreetlabs.com/auth/google/callback. Each private invitation specifies one sub OR authoritative Google email plus an existing ownerId. Initial email enrollment works for Gmail/verified Workspace; an external Google email account needs a subject pin. Successful enrollment binds the stable subject to the existing library without resetting it. Real account/client values stay out of Git.
 

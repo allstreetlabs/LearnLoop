@@ -1,5 +1,7 @@
 # MVP backlog and release boundaries
 
+November 27 LL-H09 provider registration completed under explicit user approval: policy accepted; LearnLoop Web client enabled with exactly the HTTPS callback, no JS origins; External/Testing with two selected test users; only openid and userinfo.email declared, no sensitive/restricted scopes. Credentials encrypted/read back and backed up privately on D:; actual configuration resolves with the two owner mappings. This completes registration, not real Google callback/device acceptance or deployment. See operations/google-project-choice.md and the latest handoff. Earlier approval-pending/no-client statements are historical.
+
 November 27: LL-H08 fixed/retested in Chrome: other-tab sign-out closes stale IndexedDB connections; future storage opens anew so the older tab can sign back in without reload. Stale writes are never replayed. Revoked-session denial remains locked after cached-shell offline reload. 43 Windows tests + syntax pass. Real Google form prepared to the mandatory User Data Policy gate; policy/Web-client confirmation pending. No client/secret, live Google callback or deployment created. In-flight-response race and actual Android/HTTPS remain open.
 
 November 26 daily maintenance: clean C: source mirror fast-forwarded to the verified D: recovery milestone without changing the primary SQLite checksum. Active engineering remains on D:. C: has about 6.1 GB free again; browser/provider acceptance was not checked by maintenance. No feature or acceptance status changed.

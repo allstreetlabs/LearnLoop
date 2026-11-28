@@ -2,7 +2,7 @@
 
 Product authority: Sam. Personal learning comes first. Repo: https://github.com/allstreetlabs/LearnLoop.
 
-LearnLoop is a provisional code/project name; see docs/product/naming.md before public branding decisions. On November 26 Sam explicitly authorized the dedicated Google Cloud project creation; that project exists with no linked billing account. This narrow authorization does not imply OAuth client/credential/consent setup or host deployment approval. Read current STATUS.md before relying on older no-project statements.
+LearnLoop is a provisional code/project name; see docs/product/naming.md before public branding decisions. On November 26 Sam explicitly authorized the dedicated Google Cloud project creation; that project exists with no linked billing account. On November 27 Sam explicitly approved the policy and dedicated Web-client action; that registration is now saved in External/Testing with two selected accounts and openid/email only. Credentials are protected privately on D:. Host deployment/publication remains a separate approval; do not treat historical provider holds as the current registration state. Read current STATUS.md before relying on older no-project statements.
 
 Read README.md and docs/handoff.md before changing the prototype. Preserve sources and review history. Do not expose raw typed attempts in persisted review events. Recognition does not count as production recall. Run `npm test` and `npm run check` after changes to scheduling or persistence. Keep runtime data, exports and credentials out of Git.
 
