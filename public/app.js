@@ -7,28 +7,40 @@ const uuid = () => crypto.randomUUID();
 const current = i => i.revisions.at(-1);
 const stageName = { review: 'Review', choice: 'First check', repeat: 'Repeat check', recall: 'Recall' };
 let ownerId='local-owner', profile={id:'local-owner',name:'My personal library'}, profiles=[], activeSetId='';
-let db;
-const database = new Promise((resolve, reject) => {
-  const r = indexedDB.open('learnloop-device', 1);
-  r.onupgradeneeded = () => r.result.createObjectStore('kv');
-  r.onsuccess = () => { db = r.result; resolve(db); };
-  r.onerror = () => reject(r.error);
-});
-async function rawRead(key) { await database; return new Promise((resolve, reject) => { const r = db.transaction('kv').objectStore('kv').get(key); r.onsuccess = () => resolve(r.result); r.onerror = () => reject(r.error); }); }
-async function rawSave(values) { await database; return new Promise((resolve, reject) => { const t = db.transaction('kv', 'readwrite'); for (const [k,v] of Object.entries(values)) t.objectStore('kv').put(v,k); t.oncomplete = resolve; t.onerror = () => reject(t.error); t.onabort = () => reject(t.error); }); }
+let db, database;
+function openDatabase() {
+  if(database)return database;
+  database=new Promise((resolve,reject)=>{
+    const r=indexedDB.open('learnloop-device',1);
+    r.onupgradeneeded=()=>r.result.createObjectStore('kv');
+    r.onsuccess=()=>{
+      const connection=r.result;db=connection;
+      // Clear-Site-Data can close other tabs' connections. Future operations reopen;
+      // never retry an old write, which could resurrect data after sign-out.
+      const forget=()=>{if(db===connection){db=undefined;database=undefined;}};
+      connection.onclose=forget;
+      connection.onversionchange=()=>{connection.close();forget();};
+      resolve(connection);
+    };
+    r.onerror=()=>{database=undefined;reject(r.error);};
+  });
+  return database;
+}
+async function rawRead(key) { const connection=await openDatabase(); return new Promise((resolve, reject) => { const r = connection.transaction('kv').objectStore('kv').get(key); r.onsuccess = () => resolve(r.result); r.onerror = () => reject(r.error); }); }
+async function rawSave(values) { const connection=await openDatabase(); return new Promise((resolve, reject) => { const t = connection.transaction('kv', 'readwrite'); for (const [k,v] of Object.entries(values)) t.objectStore('kv').put(v,k); t.oncomplete = resolve; t.onerror = () => reject(t.error); t.onabort = () => reject(t.error); }); }
 const storageKey=k=>k==='device'?k:`${ownerId}:${k}`;
 const read=k=>rawRead(storageKey(k));
 const save=values=>rawSave(Object.fromEntries(Object.entries(values).map(([k,v])=>[storageKey(k),v])));
 async function migrateDeviceCache(){
   if(await rawRead('scoped-storage-v2'))return;
-  await database;
+  await openDatabase();
   const old=await new Promise((resolve,reject)=>{const t=db.transaction('kv'),r=t.objectStore('kv').openCursor(),values={};r.onsuccess=()=>{const c=r.result;if(c){if(['library','pending','editor','rejected','setAside','exportInitiatedAt'].includes(c.key)||String(c.key).startsWith('attempt:'))values[`local-owner:${c.key}`]=c.value;c.continue();}else resolve(values);};r.onerror=()=>reject(r.error);});
   // Old keys remain as recovery evidence. The marker prevents replaying them.
   await rawSave({...old,'scoped-storage-v2':true});
 }
 // A single IndexedDB transaction prevents two tabs from overwriting each other's outbox.
 async function changePending(change) {
-  await database;
+  await openDatabase();
   return new Promise((resolve,reject)=>{
     const t=db.transaction('kv','readwrite'),store=t.objectStore('kv'),key=storageKey('pending'),r=store.get(key);let next,problem;
     r.onsuccess=()=>{try{next=change(r.result||[]);store.put(next,key);}catch(e){problem=e;t.abort();}};

@@ -1,5 +1,7 @@
 # Google account, project and client choice
 
+November 27 live setup: app name LearnLoop (ASL pilot), administrator support/developer contact and External/testing audience prepared in the console. Finish requires the Google API Services User Data Policy agreement. The checkbox remains unchecked and Create unsubmitted pending specific policy/Web-client approval. No OAuth client or secret exists from this work. Planned Web client remains server-only with https://learn.allstreetlabs.com/auth/google/callback and openid/email. This is preparation, not deployed login.
+
 November 26, 2026 · dedicated project created; OAuth registration pending
 
 Sam explicitly authorized browser creation of a separate project under the existing signed-in Google account. A visible-project search found no LearnLoop match. The dedicated project was then created and selected successfully; read-only IAM confirms the intended administrator has Owner (Legacy), and Billing states there is no linked billing account. Exact account, project ID/number and observation URLs are in ignored data/deployment/google-project.json. No OAuth client, secret, consent setup, billing link or application deployment was created. The following recommendation now governs the remaining client setup.

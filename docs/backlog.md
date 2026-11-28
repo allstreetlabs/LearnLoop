@@ -1,5 +1,7 @@
 # MVP backlog and release boundaries
 
+November 27: LL-H08 fixed/retested in Chrome: other-tab sign-out closes stale IndexedDB connections; future storage opens anew so the older tab can sign back in without reload. Stale writes are never replayed. Revoked-session denial remains locked after cached-shell offline reload. 43 Windows tests + syntax pass. Real Google form prepared to the mandatory User Data Policy gate; policy/Web-client confirmation pending. No client/secret, live Google callback or deployment created. In-flight-response race and actual Android/HTTPS remain open.
+
 November 26 daily maintenance: clean C: source mirror fast-forwarded to the verified D: recovery milestone without changing the primary SQLite checksum. Active engineering remains on D:. C: has about 6.1 GB free again; browser/provider acceptance was not checked by maintenance. No feature or acceptance status changed.
 
 November 26 local release preparation: LL-H07 implemented/tested. New scripts/prepare-recovery.mjs accepts a trusted normalized SQLite checkpoint into a new destination, retains learning/identity/dedupe data and clears all sessions/OAuth flows. Refuses existing paths, release placement, invalid digests, sidecars/WAL-mode or invalid schemas. Updated backup helper normalizes only its new copy. 43 Windows tests + syntax pass; actual checkpoint recovery receipt follows closeout. C: is full; active source/test work moved by separate copy to the dedicated D: checkout recorded in STATUS.md. No Google client/consent, server change, new job or deployment executed.
